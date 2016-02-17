@@ -1,15 +1,20 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.utils.encoding import python_2_unicode_compatible
 # Create your models here.
 
+@python_2_unicode_compatible
 class Course(models.Model):
     course_name = models.CharField(max_length=100, blank=False)
     units = models.IntegerField(default=3)
     description = models.TextField()
     is_current_sem = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.course_name
+
+@python_2_unicode_compatible
 class Section(models.Model):
     SECTION_TYPES = (
         ('LEC', 'Lecture'),
@@ -24,6 +29,10 @@ class Section(models.Model):
     class Meta:
         unique_together = ("course", "display_text")
 
+    def __str__(self):
+        return (self.course.course_name + " " + self.section_type + " " + self.display_text)
+
+@python_2_unicode_compatible
 class User(models.Model):
     ROLES = (
         ('ADM', 'Admin'),
@@ -37,15 +46,27 @@ class User(models.Model):
     prev_assigned_courses = models.ManyToManyField(Course, through='PrevAssignment', related_name='prev_assignees')
     applied_sections = models.ManyToManyField(Section, through='Application')
 
+    def __str__(self):
+        return self.user_name
+
+@python_2_unicode_compatible
 class TimeWindow(models.Model):
     name = models.CharField(max_length=100, blank=False)
     start_date = models.DateField(blank=False)
     end_date = models.DateField(blank=False)
 
+    def __str__(self):
+        return self.name
+
+@python_2_unicode_compatible
 class Tag(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     tag_name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.tag_name
+
+@python_2_unicode_compatible
 class Expertise(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -53,7 +74,11 @@ class Expertise(models.Model):
 
     class Meta:
         unique_together = ("user", "course")
+    
+    def __str__(self):
+        return (self.user.user_name + "_" + self.course.course_name + "_" + str(self.num_years) + "_years")
 
+@python_2_unicode_compatible
 class PrevAssignment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -61,7 +86,11 @@ class PrevAssignment(models.Model):
 
     class Meta:
         unique_together = ("user", "course")
+    
+    def __str__(self):
+        return (self.user.user_name + "_" + self.course.course_name + "_" + str(self.year))
 
+@python_2_unicode_compatible
 class Application(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
@@ -69,3 +98,6 @@ class Application(models.Model):
 
     class Meta:
         unique_together = ("user", "section")
+
+    def __str__(self):
+        return (self.user.user_name + "_" + self.section.__str__())        
