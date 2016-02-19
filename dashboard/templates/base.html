@@ -1,22 +1,103 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css" />
-    <title>{% block title %}My amazing site{% endblock %}</title>
+    <title>{% block title %} BITSDSS {% endblock %}</title>
+    {% block head %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Bootstrap core CSS -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-tags.css' %}" rel="stylesheet">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    {% endblock %}
 </head>
 
-<body>
-    <div id="sidebar">
-        {% block sidebar %}
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/blog/">Blog</a></li>
+<body role="document">
+{% block body %}
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">BITS<b>DSS</b></a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          {% if user.is_authenticated != True %}
+            <li><a href="">About</a></li>
+            <li><a href="">Register</a></li>
+          {% endif %}
+          {% if user.is_authenticated %}
+            <li><a><span class="glyphicon glyphicon-user margin-right-10"></span>{{ user.username }}</a></li>
+            <li><a href="/logout/">Logout</a></li>
+          {% endif %}
         </ul>
-        {% endblock %}
+      </div><!--/.nav-collapse -->
     </div>
+  </nav>
 
-    <div id="content">
-        {% block content %}{% endblock %}
-    </div>
-</body>
+    
+    
+
+{% endblock %}
+{% block script %}
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script type="text/javascript">
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+
+            $("#print-icon-1").click(function(){
+        $("#material-card1").print(/*options*/);
+      });
+
+      $(document).ready(function() {
+        if (Cookies.get('lang-faculty') == null){
+            $('#language-selector').modal('show');
+        }
+        else{
+            if(Cookies.get('lang-faculty') == 'eng'){
+                $('.menu-hindi').addClass('hide');
+                $('.menu-eng').removeClass('hide');
+            }
+            else{
+                $('.menu-eng').addClass('hide');
+                $('.menu-hindi').removeClass('hide');
+            }
+        }
+      });
+
+      $('.btn-lang-sel').click(function(){
+        $('#language-selector').modal('hide');
+      });
+
+      $("#lang-eng").click(function(){
+        Cookies.set('lang-faculty', 'eng', { expires: 7 });
+        $('.menu-eng').removeClass('hide');
+        $('.menu-hindi').addClass('hide');
+      });
+
+      $("#lang-hindi").click(function(){
+        Cookies.set('lang-faculty', 'hindi', { expires: 7 });
+        $('.menu-hindi').removeClass('hide');
+        $('.menu-eng').addClass('hide');
+      });
+  </script>
+{% endblock %}
+  </body>
 </html>

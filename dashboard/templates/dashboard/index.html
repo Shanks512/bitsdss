@@ -1,7 +1,8 @@
+<p>Welcome, {{ user.username }}.</p>
 {% if user_list %}
     <ul>
     {% for user in user_list %}
-        <li><a href="/spolls/{{ user.id }}/">{{ user.user_name }}</a></li>
+        <li><a href="">{{ user.username }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
