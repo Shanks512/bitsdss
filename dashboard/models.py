@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 @python_2_unicode_compatible
 class Course(models.Model):
-    course_name = models.CharField(max_length=100, blank=False)
+    course_name = models.CharField(max_length=100)
     course_code = models.CharField(max_length=10, default="CS101")
     units = models.IntegerField(default=3)
     description = models.TextField()
@@ -16,6 +16,9 @@ class Course(models.Model):
 
     experts = models.ManyToManyField(User, through='Expertise', related_name='expert_courses')
     prev_assignees = models.ManyToManyField(User, through='PrevAssignment', related_name='prev_assigned_courses')
+
+    class Meta:
+        ordering = ('course_name',)
 
     def __str__(self):
         return self.course_name
@@ -28,11 +31,11 @@ class Section(models.Model):
         ('PRA', 'Practical'),
     )
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    section_type = models.CharField(max_length=3, choices=SECTION_TYPES, blank=False)
-    display_text = models.CharField(max_length=50, blank=False)
-    num_hours = models.IntegerField(blank=False)
+    section_type = models.CharField(max_length=3, choices=SECTION_TYPES)
+    display_text = models.CharField(max_length=50)
+    num_hours = models.IntegerField(default=3)
 
-    applied_users = models.ManyToManyField(User, through='Application')
+    applied_users = models.ManyToManyField(User, through='Application', related_name='applied_sections')
 
     class Meta:
         unique_together = ("course", "display_text")
@@ -40,29 +43,11 @@ class Section(models.Model):
     def __str__(self):
         return (self.course.course_name + " " + self.section_type + " " + self.display_text)
 
-# @python_2_unicode_compatible
-# class Profile(models.Model):
-#     # ROLES = (
-#     #     ('ADM', 'Admin'),
-#     #     ('HOD', 'Head Of Department'),
-#     #     ('FAC', 'Faculty'),
-#     # )
-#     # username = models.CharField(max_length=100, blank=False)
-#     # role = models.CharField(max_length=3, choices=ROLES, blank=False)
-#     # password = models.CharField(max_length=100, blank=False)
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     # expert_courses = models.ManyToManyField(Course, through='Expertise', related_name='experts')
-#     # prev_assigned_courses = models.ManyToManyField(Course, through='PrevAssignment', related_name='prev_assignees')
-#     # applied_sections = models.ManyToManyField(Section, through='Application')
-
-#     def __str__(self):
-#         return self.username
-
 @python_2_unicode_compatible
 class TimeWindow(models.Model):
-    name = models.CharField(max_length=100, blank=False)
-    start_date = models.DateField(blank=False)
-    end_date = models.DateField(blank=False)
+    name = models.CharField(max_length=100)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -107,6 +92,9 @@ class Application(models.Model):
 
     class Meta:
         unique_together = ("user", "section")
+        permissions = (
+            ("assign_application", "Can assign or approve the application"),
+        )
 
     def __str__(self):
         return (self.user.username + "_" + self.section.__str__())        
