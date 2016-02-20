@@ -234,7 +234,7 @@ def add_section(request, section_id):
 # @time_check(is_application_window)
 def remove_section(request, section_id):
     sec = get_object_or_404(Section, pk=section_id)
-    appl = Application.objects.get_or_create(user=request.user, section=sec)
+    appl = Application.objects.get(user=request.user, section=sec)
     appl.delete()
     return redirect('/home/')
 
