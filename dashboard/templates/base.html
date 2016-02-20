@@ -62,7 +62,11 @@
         $('[data-toggle="tooltip"]').tooltip();
       });
 
-            $("#print-icon-1").click(function(){
+      $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+      });
+
+    $("#print-icon-1").click(function(){
         $("#material-card1").print(/*options*/);
       });
 

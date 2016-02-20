@@ -2,8 +2,9 @@ from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from .models import User, Course
+from .models import *
 from django.contrib.auth.decorators import login_required
+from django import forms
 
 @login_required(login_url='/login/')
 def index(request):
@@ -24,7 +25,7 @@ def login(request):
     #     form = MyForm(initial={'key': 'value'})
 
     # return render(request, 'form_template.html', {'form': form})
-    state = "Please log in below..."
+    state = ""
     username = password = ''
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -42,10 +43,13 @@ def login(request):
                     return HttpResponseRedirect('/dashboard/admin/')
                 #return HttpResponseRedirect('/')
             else:
-                raise forms.ValidationError(u"Your account is not active, please contact the site admin.")
+                #raise forms.ValidationError("Your account is not active, please contact the site admin.")
+                state = "Account is not active"
+
         else:
-            raise forms.ValidationError(u"Incorrect username/password")
-    return render(request, 'login.html')
+            #raise forms.ValidationError("Incorrect username/password")
+            state = "Incorrect username/password"
+    return render(request, 'login.html', {'state' : state})
 
 
 @require_http_methods(["GET", "POST"])
@@ -61,6 +65,14 @@ def hod(request):
 def faculty(request):
     course_list = Course.objects.filter(is_current_sem=True)
     return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
+
+def current_sem_course_details(request, course_num):
+    course = Course.objects.get(course_code=course_num)
+    sections = Section.objects.filter(course__course_code=course_num)
+    return render(request, 'faculty_current_sem_course_detail.html', {'course':course, 'sections':sections})
+
+def course_add(request, course_num):
+    return HttpResponse(course_num + "Added to my courses.")
 
 def logout(request):
     """

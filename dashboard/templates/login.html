@@ -16,10 +16,9 @@
         <h4>Login</h4>
       </div>
       <div class="login-body">
-        {% if form.errors %}
-          <div class="alert alert-danger margin-top-20 hide"><p>Incorrect username or password</p></div>
+        {% if state %}  
+          <div class="alert alert-danger margin-top-20">{{ state }}</div>
         {% endif %}
-        {{ state }}
         <form method="post" action="/login/"> {% csrf_token %}
           <input type="text" name="username" class="form-control" placeholder="Username">
           <input type="password" name="password" class="form-control" placeholder="Password">
