@@ -58,8 +58,31 @@ def admin(request):
 def hod(request):
     return render(request, 'hod_dashboard.html')
 
+
+@login_required
 def faculty(request):
     course_list = Course.objects.filter(is_current_sem=True)
+    return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
+
+
+@login_required
+def faculty_current_courses(request):
+    course_list = Course.objects.filter(is_current_sem=True)
+    return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
+
+@login_required
+def faculty_department_courses(request):
+    course_list = Course.objects.all()
+    return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
+
+@login_required
+def hod_current_courses(request):
+    course_list = Course.objects.filter(is_current_sem=True)
+    return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
+
+@login_required
+def faculty_department_courses(request):
+    course_list = Course.objects.all()
     return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
 
 def logout(request):
@@ -76,4 +99,4 @@ def is_hod(user):
     return user.groups.filter(name='hod').exists()
 
 def is_admin(user):
-    return user.groups.filter(name='admin').exists()
+    return user.groups.filter(name='admin').exists()    
