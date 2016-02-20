@@ -2,9 +2,12 @@ from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from .models import *
+from .models import User, Course, Section, Application, Expertise, PrevAssignment, Tag, TimeWindow
 from django.contrib.auth.decorators import login_required
 from django import forms
+from django.views.generic import ListView, DetailView
+from django.utils import timezone
+from django.forms import modelformset_factory
 
 @login_required(login_url='/login/')
 def index(request):
@@ -157,3 +160,30 @@ def faculty_course_cart(request):
 def hod_faculty_detail(request):
     expertise = get_object_or_404(Expertise, user=request.application.user)
     return render(request, 'hod_faculty_detail.html', {'expertise':expertise})
+
+class ApplicationList(ListView):
+    context_object_name = 'application_list'
+    template_name = 'application_list.html'
+
+    def get_queryset(self):
+        return Application.objects.filter(user=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(ApplicationList, self).get_context_data(**kwargs)
+        context['teacher'] = self.request.user
+        return context
+
+def manage_sections(request):
+    SectionFormSet = modelformset_factory(Section, fields=('name', 'title'))
+    if request.method == 'POST':
+        formset = AuthorFormSet(request.POST, request.FILES)
+        if formset.is_valid():
+            formset.save()
+            # do something.
+    else:
+        formset = AuthorFormSet()
+    return render(request, 'manage_sections.html', {'formset': formset})
+
+# def apply_to_section(request, section):
+#     re
