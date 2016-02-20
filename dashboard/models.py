@@ -40,29 +40,11 @@ class Section(models.Model):
     def __str__(self):
         return (self.course.course_name + " " + self.section_type + " " + self.display_text)
 
-# @python_2_unicode_compatible
-# class Profile(models.Model):
-#     # ROLES = (
-#     #     ('ADM', 'Admin'),
-#     #     ('HOD', 'Head Of Department'),
-#     #     ('FAC', 'Faculty'),
-#     # )
-#     # username = models.CharField(max_length=100, blank=False)
-#     # role = models.CharField(max_length=3, choices=ROLES, blank=False)
-#     # password = models.CharField(max_length=100, blank=False)
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     # expert_courses = models.ManyToManyField(Course, through='Expertise', related_name='experts')
-#     # prev_assigned_courses = models.ManyToManyField(Course, through='PrevAssignment', related_name='prev_assignees')
-#     # applied_sections = models.ManyToManyField(Section, through='Application')
-
-#     def __str__(self):
-#         return self.username
-
 @python_2_unicode_compatible
 class TimeWindow(models.Model):
     name = models.CharField(max_length=100, blank=False)
-    start_date = models.DateField(blank=False)
-    end_date = models.DateField(blank=False)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return self.name

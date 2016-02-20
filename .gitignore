@@ -3,4 +3,4 @@ migrations/__pycache__
 migrations/versions/__pycache__
 *.pyc
 db.sqlite3
-
+static/
