@@ -12,7 +12,6 @@ urlpatterns = [
 
     url(r'^dashboard/faculty/$', views.faculty, name='faculty'),
     url(r'^dashboard/faculty/current-courses/(?P<course_num>\w+)/$', views.faculty_current_sem_course_details, name='faculty_current_sem_course_details'),
-    url(r'^dashboard/faculty/current-courses/(?P<course_num>\w+)/add/$', views.course_add, name='add-course'),
     url(r'^dashboard/faculty/course-cart/$', views.FacultyApplicationList.as_view(), name='faculty-applied-sections'),
     url(r'^dashboard/faculty/sections/(?P<section_id>\w+)/add/$', views.faculty_add_section, name='faculty-add-section'),
     

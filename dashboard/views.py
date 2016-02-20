@@ -129,8 +129,6 @@ def faculty_current_sem_course_details(request, course_num):
     prev_faculty = PrevAssignment.objects.filter(course__course_code=course_num)
     return render(request, 'faculty_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty})
 
-def course_add(request, course_num):
-    return HttpResponse(course_num + "Added to my courses.")
 
 @login_required
 def faculty_course_detail(request, course_id):
@@ -198,14 +196,14 @@ class HodApplicationList(UserPassesTestMixin, ListView):
 def faculty_add_section(request, section_id):
     sec = get_object_or_404(Section, pk=section_id)
     appl = Application.objects.get_or_create(user=request.user, section=sec)
-    return redirect('/dashboard/faculty')
+    return redirect('/dashboard/faculty/')
 
 @user_passes_test(is_hod)
 @login_required
 def hod_add_section(request, section_id):
     sec = get_object_or_404(Section, pk=section_id)
     appl = Application.objects.get_or_create(user=request.user, section=sec)
-    return redirect('/dashboard/hod')
+    return redirect('/dashboard/hod/')
 
 @user_passes_test(is_hod)
 @login_required
@@ -213,4 +211,4 @@ def hod_add_course_to_semester(request, course_num):
     course = get_object_or_404(Course, course_code=course_num)
     course.is_current_sem = True
     course.save()
-    return redirect('/dashboard/hod')
+    return redirect('/dashboard/hod/')

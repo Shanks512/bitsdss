@@ -58,13 +58,16 @@
                   </div>
                   <div class="col-md-10">
                   {% for section in sections %}
-                    <label><input type="checkbox" name="{{ section }}">{{ section.section_type }} ({{ section.display_text }})</label>
+                    <!-- <label>
+                      <input type="checkbox" class="section-checkbox" id="section-{{ forloop.counter }}" name="section">{{ section.section_type }} ({{ section.display_text }})
+                    </label> -->
+                    <a class="btn btn-green" href="/dashboard/faculty/sections/{{ section.id }}/add/" style="margin-right:10px;box-shadow:0px 0px 0px;">{{ section.section_type }} ({{ section.display_text }})</a>
                   {% endfor %}
                   </div>
               </div>
-              <div class="col-md-12" style="margin-top:20px;">
-                <a class="btn btn-green" data-toggle="modal" href="add/" id="add-course">Add to My Courses</a>
-              </div>
+              <!-- <div class="col-md-12" style="margin-top:20px;">
+                <a class="btn btn-green" data-toggle="modal" href="/dashboard/faculty/sections/{{ section.section_id }}/add/" id="add-course">Add to My Courses</a>
+              </div> -->
             </div>
           </div>
 
@@ -117,6 +120,16 @@
     <script src="{% static 'js/jQuery.print.js' %}"></script>
     <script src="{% static 'js/js.cookie.js' %}"></script>
     <script type="text/javascript">
+
+    section_url$ = ""
+
+    $(".section-checkbox").change(function(){
+
+      console.log(section_url$);
+      console.log();
+    });
+
+
       $("#print-icon-1").click(function(){
         $("#material-card1").print(/*options*/);
       });
