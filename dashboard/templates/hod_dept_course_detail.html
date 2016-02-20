@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}BITSDSS - Login{% endblock %}
+{% block head %}
+  {{ block.super }}
+{% endblock %} 
+
+{% block body %}
+  {{ block.super }}
+
+<div class="container-fluid main-area">
+      <div class="col-xs-2 side-menu">
+        <ul class="menu-eng">
+          <li><a href="/dashboard/hod/"><span class="glyphicon glyphicon-education"></span>Department Courses</a></li>
+          <li><a href="/dashboard/hod/current-courses/"><span class="glyphicon glyphicon-education"></span>Current Sem Courses</a></li>
+          <li><a href="HODCourseCart.html"><span class="glyphicon glyphicon-star"></span>My Courses</a></li>
+        </ul>
+        <ul class="menu-hindi hide">
+          <li><a href="/dashboard/hod/"><span class="glyphicon glyphicon-education"></span>विभाग पाठ्यक्रम</a></li>
+          <li><a href="/dashboard/hod/current-courses/"><span class="glyphicon glyphicon-education"></span>वर्तमान सेमेस्टर पाठ्यक्रम</a></li>
+          <li><a href="HODCourseCart.html"><span class="glyphicon glyphicon-star"></span>मेरे पाठ्यक्रम</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-10 content-area">
+          <div class="col-xs-12 material-card" style="height:100%;">
+            <div class="col-md-7 col-xs-12"><h3>{{ course.course_name }} - {{ course.course_code }}</h3></div>
+            <div class="col-md-5 col-xs-12">
+              <div class="icon-container">
+                <a href=""><span class="glyphicon glyphicon-print"></span></a>
+                <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+
+              </div>
+            </div>
+            <div class="course-details">
+              <div class="col-md-12" style="margin-top:12px;">
+                  <div class="col-md-2 no-padding">
+                    <h5>Experts</h5>
+                  </div>
+                  <div class="col-md-10">
+                    <p>
+                    {% for expert in course.experts.all %}
+                    	<span class="expertise-tag">{{ expert }}</span>
+                    {% endfor %}
+                    </p>
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <div class="col-md-2 no-padding">
+                    <h5>Description</h5>
+                  </div>
+                  <div class="col-md-10">
+                    <p>{{ course.description }}</p>
+                  </div>
+              </div>
+
+              <div class="col-md-12" style="margin-top:20px;">
+                <a class="btn btn-green" data-toggle="modal" href="add-to-curr/" id="add-course">Add to Current Semester</a>
+              </div>
+            </div>
+          </div>
+
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+{% endblock %} 
+
+
+{% block script %}
+  {{ block.super }}
+    <script src="{% static 'js/jQuery.print.js' %}"></script>
+    <script src="{% static 'js/js.cookie.js' %}"></script>
+    <script type="text/javascript">
+      $("#print-icon-1").click(function(){
+        $("#material-card1").print(/*options*/);
+      });
+
+      $(document).ready(function() {
+	    if (Cookies.get('lang-faculty') == null){
+	    	$('#language-selector').modal('show');
+	    }
+	    else{
+	    	if(Cookies.get('lang-faculty') == 'eng'){
+	    		$('.menu-hindi').addClass('hide');
+	    		$('.menu-eng').removeClass('hide');
+	    	}
+	    	else{
+	    		$('.menu-eng').addClass('hide');
+	    		$('.menu-hindi').removeClass('hide');
+	    	}
+	    }
+	  });
+
+	  $('.btn-lang-sel').click(function(){
+	  	$('#language-selector').modal('hide');
+	  });
+
+	  $("#lang-eng").click(function(){
+	  	Cookies.set('lang-faculty', 'eng', { expires: 7 });
+	    $('.menu-eng').removeClass('hide');
+	    $('.menu-hindi').addClass('hide');
+	  });
+
+	  $("#lang-hindi").click(function(){
+	  	Cookies.set('lang-faculty', 'hindi', { expires: 7 });
+	    $('.menu-hindi').removeClass('hide');
+	    $('.menu-eng').addClass('hide');
+	  });
+    </script>
+
+{% endblock %} 
+

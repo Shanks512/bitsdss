@@ -71,36 +71,36 @@
       });
 
       $(document).ready(function() {
-        if (Cookies.get('lang-faculty') == null){
-            $('#language-selector').modal('show');
+      if (Cookies.get('lang-faculty') == null){
+        $('#language-selector').modal('show');
+      }
+      else{
+        if(Cookies.get('lang-faculty') == 'eng'){
+          $('.menu-hindi').addClass('hide');
+          $('.menu-eng').removeClass('hide');
         }
         else{
-            if(Cookies.get('lang-faculty') == 'eng'){
-                $('.menu-hindi').addClass('hide');
-                $('.menu-eng').removeClass('hide');
-            }
-            else{
-                $('.menu-eng').addClass('hide');
-                $('.menu-hindi').removeClass('hide');
-            }
+          $('.menu-eng').addClass('hide');
+          $('.menu-hindi').removeClass('hide');
         }
-      });
+      }
+    });
 
-      $('.btn-lang-sel').click(function(){
-        $('#language-selector').modal('hide');
-      });
+    $('.btn-lang-sel').click(function(){
+      $('#language-selector').modal('hide');
+    });
 
-      $("#lang-eng").click(function(){
-        Cookies.set('lang-faculty', 'eng', { expires: 7 });
-        $('.menu-eng').removeClass('hide');
-        $('.menu-hindi').addClass('hide');
-      });
+    $("#lang-eng").click(function(){
+      Cookies.set('lang-faculty', 'eng', { expires: 7 });
+      $('.menu-eng').removeClass('hide');
+      $('.menu-hindi').addClass('hide');
+    });
 
-      $("#lang-hindi").click(function(){
-        Cookies.set('lang-faculty', 'hindi', { expires: 7 });
-        $('.menu-hindi').removeClass('hide');
-        $('.menu-eng').addClass('hide');
-      });
+    $("#lang-hindi").click(function(){
+      Cookies.set('lang-faculty', 'hindi', { expires: 7 });
+      $('.menu-hindi').removeClass('hide');
+      $('.menu-eng').addClass('hide');
+    });
   </script>
 {% endblock %}
   </body>

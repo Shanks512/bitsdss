@@ -57,7 +57,8 @@ def admin(request):
     return render(request, 'admin_dashboard.html')
 
 def hod(request):
-    return render(request, 'hod_dashboard.html')
+    course_list = Course.objects.all()
+    return render(request, 'hod_department_courses.html', {'course_list':course_list})
 
 
 @login_required
@@ -81,16 +82,27 @@ def hod_current_courses(request):
     return render(request, 'hod_current_sem_courses.html', {'course_list':course_list})
 
 @login_required
+def hod_current_sem_course_details(request, course_num):
+    course = Course.objects.get(course_code=course_num)
+    sections = Section.objects.filter(course__course_code=course_num)
+    return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections})
+
+@login_required
 def hod_department_courses(request):
     course_list = Course.objects.all()
     return render(request, 'hod_department_courses.html', {'course_list':course_list})
+
+@login_required
+def department_course_details(request, course_num):
+    course = Course.objects.get(course_code=course_num)
+    return render(request, 'hod_dept_course_detail.html', {'course':course})
 
 @login_required
 def admin_department_courses(request):
     course_list = Course.objects.all()
     return render(request, 'admin_department_courses.html', {'course_list':course_list})
 
-def current_sem_course_details(request, course_num):
+def faculty_current_sem_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     sections = Section.objects.filter(course__course_code=course_num)
     return render(request, 'faculty_current_sem_course_detail.html', {'course':course, 'sections':sections})
