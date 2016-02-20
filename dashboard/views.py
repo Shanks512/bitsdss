@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -192,3 +192,25 @@ class HodApplicationList(UserPassesTestMixin, ListView):
 
     def test_func(self):
         return self.request.user.groups.filter(name='hod').exists()
+
+@user_passes_test(is_faculty)
+@login_required
+def faculty_add_section(request, section_id):
+    sec = get_object_or_404(Section, pk=section_id)
+    appl = Application.objects.get_or_create(user=request.user, section=sec)
+    return redirect('/dashboard/faculty')
+
+@user_passes_test(is_hod)
+@login_required
+def hod_add_section(request, section_id):
+    sec = get_object_or_404(Section, pk=section_id)
+    appl = Application.objects.get_or_create(user=request.user, section=sec)
+    return redirect('/dashboard/hod')
+
+@user_passes_test(is_hod)
+@login_required
+def hod_add_course_to_semester(request, course_num):
+    course = get_object_or_404(Course, course_code=course_num)
+    course.is_current_sem = True
+    course.save()
+    return redirect('/dashboard/hod')
