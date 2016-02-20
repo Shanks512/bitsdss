@@ -8,6 +8,8 @@ from django import forms
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.forms import modelformset_factory
+from django.utils.decorators import method_decorator
+
 
 @login_required(login_url='/login/')
 def index(request):
@@ -19,15 +21,6 @@ def index(request):
 def login(request):
     logout(request)
     username = password = ''
-    # if request.method == "POST":
-    #     form = MyForm(request.POST)
-    #     if form.is_valid():
-    #         # <process for239ha3e#9943649m cleaned data>
-    #         return HttpResponseRedirect('/success/')
-    # else:
-    #     form = MyForm(initial={'key': 'value'})
-
-    # return render(request, 'form_template.html', {'form': form})
     state = ""
     username = password = ''
     if request.method == 'POST':
@@ -44,7 +37,6 @@ def login(request):
                     return HttpResponseRedirect('/dashboard/hod/')
                 if is_admin(user):
                     return HttpResponseRedirect('/dashboard/admin/')
-                #return HttpResponseRedirect('/')
             else:
                 state = "Account is not active"
         else:
@@ -137,11 +129,6 @@ def hod_course_detail(request, course_id):
     return render(request, 'dashboard/hod_course_detail.html', {'course': course})
 
 @login_required
-def hod_course_cart(request):
-    course_cart = Application.objects.filter(user=request.user)
-    return render(request, 'hod_course_cart.html', {'course_cart':course_cart})
-
-@login_required
 def admin_course_detail(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     return render(request, 'dashboard/admin_course_detail.html', {'course': course})
@@ -152,16 +139,14 @@ def faculty_applied_sections(request, course_id):
     return render(request, 'dashboard/faculty_course_detail.html', {'course': course})
 
 @login_required
-def faculty_course_cart(request):
-    course_cart = Application.objects.filter(user=request.user)
-    return render(request, 'faculty_course_cart.html', {'course_cart':course_cart})
-
-@login_required
 def hod_faculty_detail(request):
     expertise = get_object_or_404(Expertise, user=request.application.user)
     return render(request, 'hod_faculty_detail.html', {'expertise':expertise})
 
-class ApplicationList(ListView):
+
+
+@method_decorator(login_required, name='dispatch')
+class FacultyApplicationList(ListView):
     context_object_name = 'application_list'
     template_name = 'faculty_course_cart.html'
 
@@ -170,20 +155,18 @@ class ApplicationList(ListView):
     
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
-        context = super(ApplicationList, self).get_context_data(**kwargs)
-        context['teacher'] = self.request.user
+        context = super(FacultyApplicationList, self).get_context_data(**kwargs)
         return context
 
-# def manage_sections(request):
-#     SectionFormSet = modelformset_factory(Section, fields=('name', 'title'))
-#     if request.method == 'POST':
-#         formset = AuthorFormSet(request.POST, request.FILES)
-#         if formset.is_valid():
-#             formset.save()
-#             # do something.
-#     else:
-#         formset = AuthorFormSet()
-#     return render(request, 'manage_sections.html', {'formset': formset})
+@method_decorator(login_required, name='dispatch')
+class HodApplicationList(ListView):
+    context_object_name = 'application_list'
+    template_name = 'hod_course_cart.html'
 
-# def apply_to_section(request, section):
-#     re
+    def get_queryset(self):
+        return Application.objects.filter(user=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(HodApplicationList, self).get_context_data(**kwargs)
+        return context        

@@ -39,10 +39,10 @@
                 <p>This list displays the selected courses.</p>
               </div>
 
-              {% for course in course_cart %}
+              {% for application in application_list %}
               <div class='col-md-12 course-cart-item'>
                 <span class='course-number'><span class='glyphicon glyphicon-record'></span></span>
-                <span class='course-cart-course-name' id='test'>{{ course.course_name }}</span>
+                <span class='course-cart-course-name' id='test'>{{ application.section.course.course_name }} ({{ application.section.display_text }})</span>
                 <span class='course-delete'><span class='glyphicon glyphicon-trash'></span></span>
               </div>
               {% endfor %}
