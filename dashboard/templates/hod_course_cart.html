@@ -42,8 +42,8 @@
               {% for application in application_list %}
               <div class='col-md-12 course-cart-item'>
                 <span class='course-number'><span class='glyphicon glyphicon-record'></span></span>
-                <span class='course-cart-course-name' id='test'>{{ application.section.course.course_name }} ({{ application.section.display_text }})</span>
-                <span class='course-delete'><span class='glyphicon glyphicon-trash'></span></span>
+                <span class='course-cart-course-name' id='test'>{{ application.section.course.course_name }} ({{ application.section.section_type }} - {{ application.section.display_text }})</span>
+                <a href="/sections/{{ application.section.id }}/remove/"><span class='course-delete'><span class='glyphicon glyphicon-trash'></span></span></a>
               </div>
               {% endfor %}
 

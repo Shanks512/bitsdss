@@ -61,7 +61,7 @@
                     <!-- <label>
                       <input type="checkbox" class="section-checkbox" id="section-{{ forloop.counter }}" name="section">{{ section.section_type }} ({{ section.display_text }})
                     </label> -->
-                    <a class="btn btn-green" href="/dashboard/faculty/sections/{{ section.id }}/add/" style="margin-right:10px;box-shadow:0px 0px 0px;">{{ section.section_type }} ({{ section.display_text }})</a>
+                    <a class="btn btn-green" href="/sections/{{ section.id }}/add/" style="margin-right:10px;box-shadow:0px 0px 0px;">{{ section.section_type }} ({{ section.display_text }})</a>
                   {% endfor %}
                   </div>
               </div>

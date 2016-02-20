@@ -9,15 +9,44 @@ from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.forms import modelformset_factory
 from django.utils.decorators import method_decorator
+from datetime import date
 
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test
 
-@login_required(login_url='/login/')
-def index(request):
-    user_list = User.objects.all()
-    context = {'user_list': user_list}
-    return render(request, 'dashboard.html', context)
+def window_dec(id):
+    def window():
+        w = TimeWindow.objects.get(id=id)
+        if (w.start_date is None) or (w.end_date is None):
+            return False
+        return w.start_date <= date.today() <= w.end_date
+    return window
+
+is_selection_window = window_dec(1)
+is_application_window = window_dec(2)
+is_assignment_window = window_dec(3)
+
+def is_app_or_ass_window():
+    return (is_application_window or is_assignment_window)
+
+def time_check(window_check):
+    def wind_check(func):
+       def func_wrapper(*args, **kwargs):
+            if window_check():
+                func(*args, **kwargs)
+            else:
+                return redirect('/home/')
+       return func_wrapper
+    return wind_check
+
+@login_required()
+def home(request):
+    if is_admin(request.user):
+        return redirect('/dashboard/admin/')
+    if is_hod(request.user):
+        return redirect('/dashboard/hod/')
+    if is_faculty(request.user):
+        return redirect('/dashboard/faculty/')
 
 @require_http_methods(["GET", "POST"])
 def login(request):
@@ -80,24 +109,28 @@ def faculty(request):
 
 @user_passes_test(is_faculty)
 @login_required
+# @time_check(is_app_or_ass_window)
 def faculty_current_courses(request):
     course_list = Course.objects.filter(is_current_sem=True)
     return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
 
 @user_passes_test(is_faculty)
 @login_required
+# @time_check(is_app_or_ass_window)
 def faculty_department_courses(request):
     course_list = Course.objects.all()
     return render(request, 'faculty_department_courses.html', {'course_list':course_list})
 
 @user_passes_test(is_hod)
 @login_required
+# @time_check(is_app_or_ass_window)
 def hod_current_courses(request):
     course_list = Course.objects.filter(is_current_sem=True)
     return render(request, 'hod_current_sem_courses.html', {'course_list':course_list})
 
 @user_passes_test(is_hod)
 @login_required
+# @time_check(is_app_or_ass_window)
 def hod_current_sem_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     sections = Section.objects.filter(course__course_code=course_num)
@@ -160,7 +193,6 @@ def hod_faculty_detail(request):
     return render(request, 'hod_faculty_detail.html', {'expertise':expertise})
 
 
-
 @method_decorator(login_required, name='dispatch')
 class FacultyApplicationList(ListView):
     context_object_name = 'application_list'
@@ -191,24 +223,35 @@ class HodApplicationList(UserPassesTestMixin, ListView):
     def test_func(self):
         return self.request.user.groups.filter(name='hod').exists()
 
-@user_passes_test(is_faculty)
 @login_required
-def faculty_add_section(request, section_id):
+# @time_check(is_application_window)
+def add_section(request, section_id):
     sec = get_object_or_404(Section, pk=section_id)
     appl = Application.objects.get_or_create(user=request.user, section=sec)
-    return redirect('/dashboard/faculty/')
+    return redirect('/home/')
+
+@login_required
+# @time_check(is_application_window)
+def remove_section(request, section_id):
+    sec = get_object_or_404(Section, pk=section_id)
+    appl = Application.objects.get_or_create(user=request.user, section=sec)
+    appl.delete()
+    return redirect('/home/')
 
 @user_passes_test(is_hod)
 @login_required
-def hod_add_section(request, section_id):
-    sec = get_object_or_404(Section, pk=section_id)
-    appl = Application.objects.get_or_create(user=request.user, section=sec)
-    return redirect('/dashboard/hod/')
-
-@user_passes_test(is_hod)
-@login_required
+# @time_check(is_selection_window)
 def hod_add_course_to_semester(request, course_num):
     course = get_object_or_404(Course, course_code=course_num)
     course.is_current_sem = True
     course.save()
     return redirect('/dashboard/hod/')
+
+@user_passes_test(is_hod)
+@login_required
+# @time_check(is_selection_window)
+def hod_remove_course_from_semester(request, course_num):
+    course = get_object_or_404(Course, course_code=course_num)
+    course.is_current_sem = False
+    course.save()
+    return redirect('/dashboard/hod')
