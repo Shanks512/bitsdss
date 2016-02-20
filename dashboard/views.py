@@ -81,7 +81,7 @@ def hod_current_courses(request):
     return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
 
 @login_required
-def faculty_department_courses(request):
+def hod_department_courses(request):
     course_list = Course.objects.all()
     return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
 
@@ -99,4 +99,19 @@ def is_hod(user):
     return user.groups.filter(name='hod').exists()
 
 def is_admin(user):
-    return user.groups.filter(name='admin').exists()    
+    return user.groups.filter(name='admin').exists()
+
+@login_required
+def faculty_course_detail(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    return render(request, 'dashboard/faculty_course_detail.html', {'course': course})
+
+@login_required
+def hod_course_detail(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    return render(request, 'dashboard/hod_course_detail.html', {'course': course})
+
+@login_required
+def admin_course_detail(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    return render(request, 'dashboard/admin_course_detail.html', {'course': course})
