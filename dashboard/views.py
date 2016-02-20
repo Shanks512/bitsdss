@@ -94,7 +94,13 @@ def is_admin(user):
 
 @user_passes_test(is_admin)
 def admin(request):
-    return render(request, 'admin_dashboard.html')
+    course_list = Course.objects.all()
+    return render(request, 'admin_department_courses.html', {'course_list':course_list})
+
+def admin_faculty_list(request):
+    user_list = User.objects.filter(groups__name='faculty') | User.objects.filter(groups__name='hod')
+    return render(request, 'admin_faculty_list.html', {'user_list':user_list})
+
 
 @user_passes_test(is_hod)
 def hod(request):
