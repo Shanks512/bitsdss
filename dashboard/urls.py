@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^logout/$', views.logout, name='logout'),
     
     url(r'^dashboard/admin/$', views.admin, name='admin'),
-    # url(r'^dashboard/admin/time-windows/$', views.set_time_windows, name='set-time-windows'),
+    url(r'^dashboard/admin/time-windows/$', views.set_time_windows, name='set-time-windows'),
     url(r'^dashboard/admin/faculty-list/$', views.admin_faculty_list, name='faculty_list'),
 
     url(r'^dashboard/faculty/$', views.faculty, name='faculty'),

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}BITSDSS - Login{% endblock %}
+{% block head %}
+  {{ block.super }}
+{% endblock %}
+
+{% block body %}
+  {{ block.super }}
+
+  <div class="container-fluid main-area">
+	  <div class="col-xs-2 side-menu">
+	    <ul class="menu-eng">
+          <li><a href="/dashboard/admin/"><span class="glyphicon glyphicon-education"></span>Department Courses</a></li>
+          <li><a href="/dashboard/admin/time-windows/"><span class="glyphicon glyphicon-star"></span>Time Windows</a></li>
+          <li><a href="/dashboard/admin/faculty-list/"><span class="glyphicon glyphicon-star"></span>Faculty List</a></li>
+        </ul>
+        <ul class="menu-hindi hide">
+          <li><a href="/dashboard/admin/"><span class="glyphicon glyphicon-education"></span>विभाग पाठ्यक्रम</a></li>
+          <li><a href="/dashboard/admin/time-windows/"><span class="glyphicon glyphicon-star"></span>समय खिड़कियां</a></li>
+          <li><a href="/dashboard/admin/faculty-list/"><span class="glyphicon glyphicon-star"></span>शिक्षक सूची</a></li>
+        </ul>
+	  </div>
+
+    <div class="col-xs-10 content-area">
+       <div class="col-xs-12 material-card" style="height:100%;">
+            <div class="col-md-7"><h3>Course Selection Window</h3></div>
+            <div class="col-md-5">
+              <div class="icon-container">
+                <a href=""><span class="glyphicon glyphicon-print"></span></a>
+                <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+              </div>
+            </div>
+            <form>
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Start Time" id="datetimepicker1">
+              </div>
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="End Time" id="datetimepicker2">
+              </div>
+            </form>
+            <div class="col-md-12">
+              <a class="btn btn-green" data-toggle="modal" href="#time-window-set" style="margin-top:20px;">Save Details</a>
+            </div>
+          </div>
+
+
+        <div class="col-xs-12 material-card" style="height:100%;">
+            <div class="col-md-7"><h3>Course Application Window</h3></div>
+            <div class="col-md-5">
+              <div class="icon-container">
+                <a href=""><span class="glyphicon glyphicon-print"></span></a>
+                <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+              </div>
+            </div>
+            <form>
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Start Time" id="datetimepicker3">
+              </div>
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="End Time" id="datetimepicker4">
+              </div>
+            </form>
+            <div class="col-md-12">
+              <a class="btn btn-green" data-toggle="modal" href="#time-window-set" style="margin-top:20px;">Save Details</a>
+            </div>
+          </div>
+
+
+          <div class="col-xs-12 material-card" style="height:100%;">
+            <div class="col-md-7"><h3>Course Assignment Window</h3></div>
+            <div class="col-md-5">
+              <div class="icon-container">
+                <a href=""><span class="glyphicon glyphicon-print"></span></a>
+                <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+              </div>
+            </div>
+            <form>
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Start Time" id="datetimepicker5">
+              </div>
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="End Time" id="datetimepicker6">
+              </div>
+            </form>
+            <div class="col-md-12">
+              <a class="btn btn-green" data-toggle="modal" href="#time-window-set" style="margin-top:20px;">Save Details</a>
+            </div>
+          </div>
+  
+
+
+
+    </div>
+  </div>
+
+
+{% endblock %}
+
+{% block script %}
+  {{ block.super }}
+    <script type="text/javascript">
+      $("#print-icon-1").click(function(){
+        $("#material-card1").print(/*options*/);
+      });
+
+
+            $(function () {
+          $('#datetimepicker1').datetimepicker();
+          $('#datetimepicker2').datetimepicker();
+          $('#datetimepicker3').datetimepicker();
+          $('#datetimepicker4').datetimepicker();
+          $('#datetimepicker5').datetimepicker();
+          $('#datetimepicker6').datetimepicker();
+      });
+
+
+    </script>
+{% endblock %}

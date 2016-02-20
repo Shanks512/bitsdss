@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}BITSDSS - Login{% endblock %}
+{% block head %}
+  {{ block.super }}
+{% endblock %}
+
+{% block body %}
+  {{ block.super }}
+
+<div class="container-fluid" style="margin-top:70px">
+      <div class="row register-container">
+        <div class="col-md-12 material-card">
+
+          <div class="col-md-7"><h3>Register</h3></div>
+          <div class="col-md-5">
+            <div class="icon-container">
+              <a href=""><span class="glyphicon glyphicon-print"></span></a>
+              <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <p class="header-small">Personal details</p>
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Full name">
+          </div>
+          <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Username">
+          </div>
+          <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Designation">
+          </div>
+          <div class="col-md-6">
+            <input type="password" class="form-control" placeholder="Choose a password">
+          </div>
+          <div class="col-md-6">
+            <input type="password" class="form-control" placeholder="Retype password">
+          </div>
+          <div class="col-md-12" id="teaching-exp">
+            <p class="header-small">Teaching Experience</p>
+          </div>
+
+
+          <div class="col-md-12 no-padding">
+            <div class="col-md-1">
+              <span class="expertise-number">1</span>
+            </div>
+            <div class="col-md-11">
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Expertise">
+              </div>
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Years of experience">
+              </div>
+              <div class="col-md-12">
+                <div id="course-list" class="tag-list"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12" id="add-expertise-button">
+            <a class="btn btn-blue btn-add-expertise margin-top-20" id="add-expertise"><span class="glyphicon glyphicon-plus-sign margin-right-10"></span>Add another expertise</a>
+          </div>
+
+          <div class="col-md-12" id="add-expertise-button">
+            <a class="btn btn-green margin-top-20" data-toggle="modal" data-target="#registered">Register</a>
+          </div>
+      </div>
+    </div>
+
+
+
+    <div id="registered" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body align-center">
+            <img src="{% static 'img/tick-icon.png' %}">
+            <h3>Registration Successful</h3>
+            <p>You have succesfully registered on the DSS System</p>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+  {{ block.super }}
+  <script type="text/javascript">
+      $(function() {
+          $('#course-list').tags({
+              tagData:[],
+              suggestions:[],
+              excludeList:[],
+              promptText:"Enter course names here"
+          });
+      });
+
+
+      $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+      });
+
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+
+      $count = 2;
+
+      $("#add-expertise").click(function(){
+        $expertise = '<div class="col-md-12 no-padding"><div class="col-md-1"><span class="expertise-number">' + $count + '</span></div><div class="col-md-11"><div class="col-md-6"><input type="text" class="form-control" placeholder="Expertise"></div><div class="col-md-6"><input type="text" class="form-control" placeholder="Years of experience"></div><div class="col-md-12"><div id="course-list-'+ $count + '" class="tag-list"></div></div></div></div>'
+        $($expertise).insertBefore("#add-expertise-button").hide().fadeIn();
+        $(function() {
+            $('#course-list-' + $count).tags({
+                tagData:[],
+                suggestions:[],
+                excludeList:[],
+                promptText:"Enter course names here"
+            });
+        });
+        $count++;
+      });
+
+      $('#registered').on('hidden.bs.modal', function () {
+        window.document.location = "/login/";
+      })
+  </script>
+{% endblock %}

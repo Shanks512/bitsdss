@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from .models import User, Course, Section, Application, Expertise, PrevAssignment, Tag, TimeWindow
 from django.contrib.auth.decorators import login_required
 from django import forms
+
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.forms import modelformset_factory
@@ -77,7 +78,17 @@ def login(request):
 
 @require_http_methods(["GET", "POST"])
 def register(request):
-    return HttpResponse("You're looking at register")
+    '''if request.method=='POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+                user = form.save(commit=False)
+                user.save()
+                return HttpResponseRedirect('/login/')
+    else:   
+        form = RegisterForm()'''
+    return render(request, 'register.html')
+
+
 
 def logout(request):
     auth_logout(request)
@@ -261,3 +272,8 @@ def hod_remove_course_from_semester(request, course_num):
     course.is_current_sem = False
     course.save()
     return redirect('/dashboard/hod')
+
+@user_passes_test(is_admin)
+@login_required
+def set_time_windows(request):
+    return render(request, 'admin_set_time_windows.html')

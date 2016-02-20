@@ -15,6 +15,7 @@
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-tags.css' %}" rel="stylesheet">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
     {% endblock %}
 </head>
 
@@ -30,13 +31,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">BITS<b>DSS</b></a>
+        <a class="navbar-brand" href="/">BITS<b>DSS</b></a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
           {% if user.is_authenticated != True %}
             <li><a href="">About</a></li>
-            <li><a href="">Register</a></li>
+            <li><a href="/register/">Register</a></li>
           {% endif %}
           {% if user.is_authenticated %}
             <li><a><span class="glyphicon glyphicon-user margin-right-10"></span>{{ user.first_name }}</a></li>
@@ -56,11 +57,18 @@
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/moment.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+  <script src="{% static 'js/jQuery.print.js' %}"></script>
+  <script src="{% static 'js/js.cookie.js' %}"></script>
+  <script src="{% static 'js/bootstrap-tags.min.js' %}"></script>
   <script type="text/javascript">
       $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
       });
+
+
 
       $(".clickable-row").click(function() {
         window.document.location = $(this).data("href");
