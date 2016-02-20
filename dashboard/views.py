@@ -163,7 +163,7 @@ def hod_faculty_detail(request):
 
 class ApplicationList(ListView):
     context_object_name = 'application_list'
-    template_name = 'application_list.html'
+    template_name = 'faculty_course_cart.html'
 
     def get_queryset(self):
         return Application.objects.filter(user=self.request.user)
@@ -174,16 +174,16 @@ class ApplicationList(ListView):
         context['teacher'] = self.request.user
         return context
 
-def manage_sections(request):
-    SectionFormSet = modelformset_factory(Section, fields=('name', 'title'))
-    if request.method == 'POST':
-        formset = AuthorFormSet(request.POST, request.FILES)
-        if formset.is_valid():
-            formset.save()
-            # do something.
-    else:
-        formset = AuthorFormSet()
-    return render(request, 'manage_sections.html', {'formset': formset})
+# def manage_sections(request):
+#     SectionFormSet = modelformset_factory(Section, fields=('name', 'title'))
+#     if request.method == 'POST':
+#         formset = AuthorFormSet(request.POST, request.FILES)
+#         if formset.is_valid():
+#             formset.save()
+#             # do something.
+#     else:
+#         formset = AuthorFormSet()
+#     return render(request, 'manage_sections.html', {'formset': formset})
 
 # def apply_to_section(request, section):
 #     re
