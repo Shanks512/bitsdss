@@ -78,7 +78,24 @@
 
               </div>
             </div>
-
+            <div class="col-md-12 course-list-table-container" style="overflow-y:auto;">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Year</th>
+                      <th>Faculty Assigned</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for faculty in prev_faculty %}
+                    <tr>
+                      <td>{{ faculty.year }}</td>
+                      <td>{{ faculty.user.first_name }} {{ faculty.user.last_name }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+            </div>
 
           </div>
       </div>

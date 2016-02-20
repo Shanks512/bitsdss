@@ -71,6 +71,37 @@
           </div>
 
 
+          <div class="col-xs-12 material-card">
+          <div class="col-md-7 col-xs-12"><h3>Previous Assignments</h3></div>
+            <div class="col-md-5 col-xs-12">
+              <div class="icon-container">
+                <a href=""><span class="glyphicon glyphicon-print"></span></a>
+                <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+
+              </div>
+            </div>
+            <div class="col-md-12 course-list-table-container" style="overflow-y:auto;">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Year</th>
+                      <th>Faculty Assigned</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for faculty in prev_faculty %}
+                    <tr>
+                      <td>{{ faculty.year }}</td>
+                      <td>{{ faculty.user.first_name }} {{ faculty.user.last_name }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+
+          </div>
+
+
       </div>
     </div>
 

@@ -85,7 +85,8 @@ def hod_current_courses(request):
 def hod_current_sem_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     sections = Section.objects.filter(course__course_code=course_num)
-    return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections})
+    prev_faculty = PrevAssignment.objects.filter(course__course_code=course_num)
+    return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty})
 
 @login_required
 def hod_department_courses(request):
@@ -105,7 +106,8 @@ def admin_department_courses(request):
 def faculty_current_sem_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     sections = Section.objects.filter(course__course_code=course_num)
-    return render(request, 'faculty_current_sem_course_detail.html', {'course':course, 'sections':sections})
+    prev_faculty = PrevAssignment.objects.filter(course__course_code=course_num)
+    return render(request, 'faculty_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty})
 
 def course_add(request, course_num):
     return HttpResponse(course_num + "Added to my courses.")
