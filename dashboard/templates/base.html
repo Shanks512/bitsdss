@@ -39,7 +39,7 @@
             <li><a href="">Register</a></li>
           {% endif %}
           {% if user.is_authenticated %}
-            <li><a><span class="glyphicon glyphicon-user margin-right-10"></span>{{ user.username }}</a></li>
+            <li><a><span class="glyphicon glyphicon-user margin-right-10"></span>{{ user.first_name }}</a></li>
             <li><a href="/logout/">Logout</a></li>
           {% endif %}
         </ul>

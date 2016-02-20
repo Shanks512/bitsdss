@@ -17,6 +17,8 @@ urlpatterns = [
     url(r'^dashboard/hod/current-courses/$', views.hod_current_courses),
     url(r'^dashboard/hod/current-courses/(?P<course_num>\w+)/$', views.hod_current_sem_course_details, name='hod_current_sem_course_details'),
     url(r'^dashboard/hod/faculty-detail/$', views.hod_faculty_detail, name='hod_faculty_detail'),
+    url(r'^dashboard/hod/course-cart/$', views.hod_course_cart, name='hod_course_cart'),
+    
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     # url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),

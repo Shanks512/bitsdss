@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}BITSDSS - Login{% endblock %}
+{% block head %}
+  {{ block.super }}
+{% endblock %} 
+
+{% block body %}
+  {{ block.super }}
+
+
+    <div class="container-fluid main-area">
+      <div class="col-xs-2 side-menu">
+        <ul class="menu-eng">
+          <li><a href="/dashboard/hod/"><span class="glyphicon glyphicon-education"></span>Department Courses</a></li>
+          <li><a href="/dashboard/hod/current-courses/"><span class="glyphicon glyphicon-education"></span>Current Sem Courses</a></li>
+          <li><a href="/dashboard/hod/course-cart/"><span class="glyphicon glyphicon-star"></span>My Courses</a></li>
+        </ul>
+        <ul class="menu-hindi hide">
+          <li><a href="/dashboard/hod/"><span class="glyphicon glyphicon-education"></span>विभाग पाठ्यक्रम</a></li>
+          <li><a href="/dashboard/hod/current-courses/"><span class="glyphicon glyphicon-education"></span>वर्तमान सेमेस्टर पाठ्यक्रम</a></li>
+          <li><a href="/dashboard/hod/course-cart/"><span class="glyphicon glyphicon-star"></span>मेरे पाठ्यक्रम</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-10 content-area">
+          <div class="col-xs-12 material-card" style="height:100%;">
+              <div class="col-md-7"><h3>Selected Courses</h3></div>
+              <div class="col-md-5">
+                <div class="icon-container">
+                  <a href=""><span class="glyphicon glyphicon-print"></span></a>
+                  <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+
+                </div>
+              </div>
+
+              <div class="col-md-12" style="margin-top:15px;" id="course-list-info">
+                <p>This list displays the selected courses.</p>
+              </div>
+
+              {% for course in course_cart %}
+              <div class='col-md-12 course-cart-item'>
+                <span class='course-number'><span class='glyphicon glyphicon-record'></span></span>
+                <span class='course-cart-course-name' id='test'>{{ course.course_name }}</span>
+                <span class='course-delete'><span class='glyphicon glyphicon-trash'></span></span>
+              </div>
+              {% endfor %}
+
+
+              <!-- <div class="col-md-12 add-new-course">
+                <a href="FacultyCurrentSemCourses.html"><span class="glyphicon glyphicon-plus-sign margin-10"></span>Click to add a new course</a>
+              </div> -->
+
+
+              <!-- <div class="col-md-12" style="margin-top:20px;">              
+                <a class="btn btn-green" data-toggle="modal" href="#course-added">Apply for Courses</a>
+              </div> -->
+
+          </div>
+
+
+
+
+      </div>
+    </div>
+
+
+
+{% endblock %} 
+
+
+{% block script %}
+  {{ block.super }}
+    <script src="{% static 'js/jQuery.print.js' %}"></script>
+    <script src="{% static 'js/js.cookie.js' %}"></script>
+    <script type="text/javascript">
+      $("#print-icon-1").click(function(){
+        $("#material-card1").print(/*options*/);
+      });
+    </script>
+
+{% endblock %} 
+

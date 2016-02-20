@@ -13,12 +13,12 @@
 <div class="container-fluid main-area">
       <div class="col-xs-2 side-menu">
         <ul class="menu-eng">
-          <li><a href="FacultyCurrentSemCourses.html"><span class="glyphicon glyphicon-education"></span>Current Sem Courses</a></li>
-          <li><a href="FacultyCourseCart.html"><span class="glyphicon glyphicon-star"></span>My Courses</a></li>
+          <li><a href="/dashboard/faculty/"><span class="glyphicon glyphicon-education"></span>Current Sem Courses</a></li>
+          <li><a href="/dashboard/faculty/course-cart/"><span class="glyphicon glyphicon-star"></span>My Courses</a></li>
         </ul>
         <ul class="menu-hindi hide">
-          <li><a href="FacultyCurrentSemCourses.html"><span class="glyphicon glyphicon-education"></span>वर्तमान सेमेस्टर पाठ्यक्रम</a></li>
-          <li><a href="FacultyCourseCart.html"><span class="glyphicon glyphicon-star"></span>मेरे पाठ्यक्रम</a></li>
+          <li><a href="/dashboard/faculty/"><span class="glyphicon glyphicon-education"></span>वर्तमान सेमेस्टर पाठ्यक्रम</a></li>
+          <li><a href="/dashboard/faculty/course-cart/"><span class="glyphicon glyphicon-star"></span>मेरे पाठ्यक्रम</a></li>
         </ul>
       </div>
       <div class="col-xs-10 content-area">
@@ -39,7 +39,7 @@
                   <div class="col-md-10">
                     <p>
                     {% for expert in course.experts.all %}
-                    	<span class="expertise-tag">{{ expert }}</span>
+                    	<span class="expertise-tag">{{ expert.first_name }} {{ expert.last_name }}</span>
                     {% endfor %}
                     </p>
                   </div>

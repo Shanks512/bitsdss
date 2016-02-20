@@ -111,9 +111,6 @@ def course_add(request, course_num):
     return HttpResponse(course_num + "Added to my courses.")
 
 def logout(request):
-    """
-    Log users out and re-direct them to the main page.
-    """
     auth_logout(request)
     return HttpResponseRedirect('/login/')
 
@@ -135,6 +132,11 @@ def faculty_course_detail(request, course_id):
 def hod_course_detail(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     return render(request, 'dashboard/hod_course_detail.html', {'course': course})
+
+@login_required
+def hod_course_cart(request):
+    course_cart = Application.objects.filter(user=request.user)
+    return render(request, 'hod_course_cart.html', {'course_cart':course_cart})
 
 @login_required
 def admin_course_detail(request, course_id):
