@@ -1,11 +1,10 @@
 from django.conf.urls import url
-
+from django.views.generic.base import RedirectView
 from . import views
 
 app_name = 'dashboard'
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    # url(r'^login/$', views.login, name='login'),
+    url(r'^$', RedirectView.as_view(url='/login/'), name='go-to-login'),
     url(r'^register/$', views.register, name='register'),
     url(r'^dashboard/admin/$', views.admin, name='admin'),
     url(r'^dashboard/hod/$', views.hod, name='hod'),
