@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}BITSDSS - Login{% endblock %}
+{% block head %}
+  {{ block.super }}
+{% endblock %}
+
+{% block body %}
+  {{ block.super }}
+
+  <div class="container-fluid main-area">
+	  <div class="col-xs-2 side-menu">
+	    <ul class="menu-eng">
+          <li><a href="/dashboard/admin/"><span class="glyphicon glyphicon-education"></span>Department Courses</a></li>
+          <li><a href="/dashboard/admin/time-windows/"><span class="glyphicon glyphicon-star"></span>Time Windows</a></li>
+          <li><a href="/dashboard/admin/faculty-list/"><span class="glyphicon glyphicon-star"></span>Faculty List</a></li>
+        </ul>
+        <ul class="menu-hindi hide">
+          <li><a href="/dashboard/admin/"><span class="glyphicon glyphicon-education"></span>विभाग पाठ्यक्रम</a></li>
+          <li><a href="/dashboard/admin/time-windows/"><span class="glyphicon glyphicon-star"></span>समय खिड़कियां</a></li>
+          <li><a href="/dashboard/admin/faculty-list/"><span class="glyphicon glyphicon-star"></span>शिक्षक सूची</a></li>
+        </ul>
+	  </div>
+
+        <div class="col-xs-10 content-area">
+          <div class="col-xs-12 material-card" style="height:100%;">
+            <div class="col-md-7"><h3>Add New Course</h3></div>
+            <div class="col-md-5">
+              <div class="icon-container">
+                <a href=""><span class="glyphicon glyphicon-print"></span></a>
+                <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+              </div>
+            </div>
+            <form method="post">{% csrf_token %}
+              <div class="col-md-12">
+                <!-- <input type="text" class="form-control" placeholder="Course Name"> -->
+                {{ form.course_name }}
+              </div>
+              <div class="col-md-6">
+                <!-- <input type="text" class="form-control" placeholder="Course ID Number"> -->
+                {{ form.course_code }}
+              </div>
+              <div class="col-md-6">
+                <!-- <input type="text" class="form-control" placeholder="Number of units"> -->
+                {{ form.units }}
+              </div>
+
+              <div class="col-md-3">
+                <label class="class-selector"><input id="lecture-cb" type="checkbox" class="margin-10"> Lecture</label>
+              </div>
+              <div class="col-md-9">
+                <!-- <input id="lecture-sel" type="text" class="form-control no-show" placeholder="Lecture Hours"> -->
+                <select id="lecture-sel" class="no-show form-control">
+                  <option>M W F - 2</option>
+                  <option>M W F - 4</option>
+                  <option>M W F - 6</option>
+                  <option>T Th S - 2</option>
+                  <option>T Th S - 4</option>
+                  <option>T Th S - 6</option>
+                </select>
+              </div>
+
+              <div class="col-md-3">
+                <label class="class-selector"><input id="tut-cb" type="checkbox" class="margin-10"> Tutorial</label>
+              </div>
+              <div class="col-md-9">
+                <!-- <input id="tut-sel" type="text" class="form-control no-show" placeholder="Tutorial Hours"> -->
+                <select id="tut-sel" class="no-show form-control">
+                  <option>W - 2</option>
+                  <option>M - 4</option>
+                  <option>F - 6</option>
+                  <option>Th - 2</option>
+                  <option>T - 4</option>
+                  <option>S - 6</option>
+                </select>
+              </div>
+
+              <div class="col-md-3">
+                <label class="class-selector"><input id="practical-cb" type="checkbox" class="margin-10"> Practical</label>
+              </div>
+              <div class="col-md-9">
+                <!-- <input id="practical-sel" type="text" class="form-control no-show" placeholder="Practical Hours"> -->
+                <select id="practical-sel" class="no-show form-control">
+                  <option>Th - 8 9</option>
+                  <option>M - 4 5</option>
+                  <option>F - 7 8</option>
+                  <option>Th - 2 3</option>
+                  <option>T - 4 5</option>
+                  <option>S - 9 10</option>
+                </select>
+              </div>
+
+              <div class="col-md-12">
+                <!-- <textarea rows="8" style="width:100%;margin-top:30px;" placeholder="Course Description"></textarea> -->
+                {{ form.description }}
+                <!-- <div id="my-tag-list" class="tag-list"></div> -->
+              </div>
+
+              <div class="col-md-12" style="margin-top:30px;">              
+                <!-- <a class="btn btn-green" data-toggle="modal" href="#course-added" id="add-to-curr">Save Details</a> -->
+                <button class="btn btn-green" type="submit" id="add-course">Save Details</button>
+              </div>
+            </form>
+          </div>
+      </div>
+
+  </div>
+
+
+    <div id="course-added" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body align-center">
+            <img src="{% static 'img/tick-icon.png' %}">
+            <h3>New Course Added</h3>
+            <p>This course has been added to the list of department courses</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+  {{ block.super }}
+    <script src="{% static 'js/jQuery.print.js' %}"></script>
+    <script src="{% static 'js/js.cookie.js' %}"></script>
+    <script type="text/javascript">
+    $("#add-course").click(function(){
+      $("#course-added").modal("show");
+    });
+
+      $("#print-icon-1").click(function(){
+        $("#material-card1").print(/*options*/);
+      });
+
+            $("#lecture-cb").change(function(){
+        if(this.checked){
+           $('#lecture-sel').removeClass('no-show');
+        }
+        if(!(this.checked)){
+           $('#lecture-sel').addClass('no-show');
+        }
+      });
+
+      $("#tut-cb").change(function(){
+        if(this.checked){
+           $('#tut-sel').removeClass('no-show');
+        }
+        if(!(this.checked)){
+           $('#tut-sel').addClass('no-show');
+        }
+      });
+
+      $("#practical-cb").change(function(){
+        if(this.checked){
+           $('#practical-sel').removeClass('no-show');
+        }
+        if(!(this.checked)){
+           $('#practical-sel').addClass('no-show');
+        }
+      });
+    </script>
+{% endblock %}

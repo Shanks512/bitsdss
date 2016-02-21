@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from .models import User, Course, Section, Application, Expertise, PrevAssignment, Tag, TimeWindow
 from django.contrib.auth.decorators import login_required
 from django import forms
-
+from .forms import *
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.forms import modelformset_factory
@@ -111,6 +111,17 @@ def admin(request):
 def admin_faculty_list(request):
     user_list = User.objects.filter(groups__name='faculty') | User.objects.filter(groups__name='hod')
     return render(request, 'admin_faculty_list.html', {'user_list':user_list})
+
+def admin_add_new_course(request):
+    if request.method=='POST':
+        form = AddCourseForm(request.POST)
+        if form.is_valid():
+                course = form.save(commit=False)
+                course.save()
+                return HttpResponseRedirect('/dashboard/admin/')
+    else:   
+        form = AddCourseForm()
+    return render(request, 'admin_add_course.html', {'form':form})
 
 
 @user_passes_test(is_hod)
