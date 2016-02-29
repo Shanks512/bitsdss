@@ -2,12 +2,18 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import *
 
-'''class RegisterForm(forms.ModelForm):
-    username = forms.CharField(widget=TextInput)
-    password = forms.CharField(widget=PasswordInput)
+CHOICES = [('faculty','Faculty'),('hod', 'Head of Department')]
+
+class RegisterForm(forms.ModelForm):
+    firstname = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Full Name', 'class':'form-control'}))
+    lastname = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Last Name', 'class':'form-control'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Username', 'class':'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Enter password here', 'class':'form-control'}))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Retype password', 'class':'form-control'}))
+    designation = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class':'form-control'}))
     class Meta:
         model = User 
-        fields = ('username', 'password') '''
+        fields = ('firstname', 'lastname', 'username', 'designation', 'password', 'password2',)
 
 class AddCourseForm(forms.ModelForm):
     course_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Course name', 'class':'form-control'}))

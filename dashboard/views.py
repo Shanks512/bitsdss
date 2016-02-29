@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.forms import modelformset_factory
 from django.utils.decorators import method_decorator
 from datetime import date
-
+from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test
 
@@ -78,15 +78,23 @@ def login(request):
 
 @require_http_methods(["GET", "POST"])
 def register(request):
-    '''if request.method=='POST':
+    if request.method=='POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
                 user = form.save(commit=False)
+                user.set_password(form.cleaned_data["password"])
+                user.first_name = form.cleaned_data["firstname"]
+                user.last_name = form.cleaned_data["lastname"]
                 user.save()
+                if form.cleaned_data["designation"] == 'faculty':
+                    g = Group.objects.get(name='faculty')
+                else:
+                    g = Group.objects.get(name='hod')
+                g.user_set.add(user)
                 return HttpResponseRedirect('/login/')
     else:   
-        form = RegisterForm()'''
-    return render(request, 'register.html')
+        form = RegisterForm()
+    return render(request, 'register.html', {'form':form})
 
 
 

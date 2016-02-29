@@ -21,53 +21,58 @@
               <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
             </div>
           </div>
-          <div class="col-md-12">
-            <p class="header-small">Personal details</p>
-          </div>
-          <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="Full name">
-          </div>
-          <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="Username">
-          </div>
-          <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="Designation">
-          </div>
-          <div class="col-md-6">
-            <input type="password" class="form-control" placeholder="Choose a password">
-          </div>
-          <div class="col-md-6">
-            <input type="password" class="form-control" placeholder="Retype password">
-          </div>
-          <div class="col-md-12" id="teaching-exp">
-            <p class="header-small">Teaching Experience</p>
-          </div>
-
-
-          <div class="col-md-12 no-padding">
-            <div class="col-md-1">
-              <span class="expertise-number">1</span>
+          <form method="post">{% csrf_token %}
+            <div class="col-md-12">
+              <p class="header-small">Personal details</p>
             </div>
-            <div class="col-md-11">
-              <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="Expertise">
+            <div class="col-md-3">
+              {{ form.firstname }}
+            </div>
+            <div class="col-md-3">
+              {{ form.lastname }}
+            </div>
+            <div class="col-md-3">
+              {{ form.username }}
+            </div>
+            <div class="col-md-3">
+              {{ form.designation }}
+            </div>
+            <div class="col-md-6">
+              {{ form.password }}
+            </div>
+            <div class="col-md-6">
+              {{ form.password2 }}
+            </div>
+            <div class="col-md-12" id="teaching-exp">
+              <p class="header-small">Teaching Experience</p>
+            </div>
+
+
+            <div class="col-md-12 no-padding">
+              <div class="col-md-1">
+                <span class="expertise-number">1</span>
               </div>
-              <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="Years of experience">
-              </div>
-              <div class="col-md-12">
-                <div id="course-list" class="tag-list"></div>
+              <div class="col-md-11">
+                <div class="col-md-6">
+                  <input type="text" class="form-control" placeholder="Expertise">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" placeholder="Years of experience">
+                </div>
+                <div class="col-md-12">
+                  <div id="course-list" class="tag-list"></div>
+                </div>
               </div>
             </div>
-          </div>
 
+            <div class="col-md-12" id="add-expertise-button">
+              <a class="btn btn-blue btn-add-expertise margin-top-20" id="add-expertise"><span class="glyphicon glyphicon-plus-sign margin-right-10"></span>Add another expertise</a>
+            </div>
+          
           <div class="col-md-12" id="add-expertise-button">
-            <a class="btn btn-blue btn-add-expertise margin-top-20" id="add-expertise"><span class="glyphicon glyphicon-plus-sign margin-right-10"></span>Add another expertise</a>
+            <input type="submit" class="btn btn-green margin-top-20" value="Register" />
           </div>
-
-          <div class="col-md-12" id="add-expertise-button">
-            <a class="btn btn-green margin-top-20" data-toggle="modal" data-target="#registered">Register</a>
-          </div>
+          </form>
       </div>
     </div>
 
@@ -124,8 +129,6 @@
         $count++;
       });
 
-      $('#registered').on('hidden.bs.modal', function () {
-        window.document.location = "/login/";
-      })
+
   </script>
 {% endblock %}
