@@ -100,15 +100,35 @@
                       <input type="hidden" id="last_name__{{ forloop.counter }}" name="variable" value="{{ application.user.last_name }}">
                       <input type="hidden" id="course_done__{{ forloop.counter }}" name="variable" value="{{ application.user.expertise_set.all }}">
                       <input type="hidden" id="applicationid__{{ forloop.counter }}" name="variable" value="{{ application.id }}">
-
                       <td>{{ application.user.first_name }} {{ application.user.last_name }} {{ tmp }}</td>
-                      <td><span class="class-tag practical-tag">{{ application.section.section_type }}</span></td>
+                      <td>
+                        {% if application.section.section_type == "TUT" %}
+                          <span class="class-tag practical-tag">{{ application.section.section_type }}</span>
+                        {% else %}
+                          <span class="class-tag tutorial-tag">{{ application.section.section_type }}</span>
+                        {% endif %}
+                      </td>
                       <td><span>{{ application.section.display_text }}</span></td>
                     </tr>
                   {% endfor %}
                   </tbody>
                 </table>
+            </div>
+          </div>
 
+
+
+
+        <div class="col-xs-12 material-card">
+          <div class="col-md-7 col-xs-12"><h3>Utilization Factor Histogram</h3></div>
+            <div class="col-md-5 col-xs-12">
+              <div class="icon-container">
+                <a href=""><span class="glyphicon glyphicon-print"></span></a>
+                <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+              </div>
+            </div>
+             <div class="col-md-12 course-list-table-container" style="overflow-y:auto;">
+              <canvas id="canvas" height="200" width="600"></canvas>
             </div>
           </div>
 
@@ -116,7 +136,7 @@
 
 
           <div class="col-xs-12 material-card">
-          <div class="col-md-7 col-xs-12"><h3>Previous Assignments {{ b }} </h3></div>
+          <div class="col-md-7 col-xs-12"><h3>Previous Assignments</h3></div>
             <div class="col-md-5 col-xs-12">
               <div class="icon-container">
                 <a href=""><span class="glyphicon glyphicon-print"></span></a>
@@ -195,6 +215,9 @@
   {{ block.super }}
     <script src="{% static 'js/jQuery.print.js' %}"></script>
     <script src="{% static 'js/js.cookie.js' %}"></script>
+    <script src="{% static 'js/Chart.Core.js' %}"></script>
+    <script src="{% static 'js/Chart.Bar.js' %}"></script>
+
     <script type="text/javascript">
       $("#print-icon-1").click(function(){
         $("#material-card1").print(/*options*/);
@@ -217,5 +240,40 @@
 
 
     </script>
+      <script>
+        var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+
+        var dict = [];
+
+        {% for user in faculty %}
+          dict.push({
+            key: "{{ user.first_name }}",
+            value: "{% if user.total_hours %}{{ user.total_hours }}{% else %}0{% endif %}"
+          });
+        {% endfor %}
+
+        var keys = [];
+
+
+        var barChartData = {
+          labels : [{% for user in faculty %}"{{ user.first_name }}",{% endfor %}],
+          datasets : [
+            {
+              fillColor : "rgba(151,187,205,0.5)",
+              strokeColor : "rgba(151,187,205,0.8)",
+              highlightFill : "rgba(151,187,205,0.75)",
+              highlightStroke : "rgba(151,187,205,1)",
+              data : [{% for user in faculty %}"{% if user.total_hours %}{{ user.total_hours }}{% else %}0{% endif %}",{% endfor %}]
+            }
+          ]
+
+        }
+        window.onload = function(){
+          var ctx = document.getElementById("canvas").getContext("2d");
+          window.myBar = new Chart(ctx).Bar(barChartData, {
+            responsive : true
+          });
+        }
+  </script>
 
 {% endblock %} 

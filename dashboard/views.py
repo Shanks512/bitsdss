@@ -14,6 +14,7 @@ from datetime import date
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import Sum
 
 def window_dec(id):
     def window():
@@ -172,13 +173,16 @@ def hod_current_sem_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     sections = Section.objects.filter(course__course_code=course_num)
     prev_faculty = PrevAssignment.objects.filter(course__course_code=course_num)
-    applications = Application.objects.filter(section__course = course)
-    return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty, 'applications':applications})
+    applications = Application.objects.filter(section__course = course).filter(is_assigned=False)
+    faculty = User.objects.exclude(groups__name='admin').annotate(total_hours=Sum('application__section__num_hours'))
+    return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty, 'applications':applications, 'faculty':faculty})
 
 def assign(request, application_id):
 	application = get_object_or_404(Application, pk = application_id)
+	course_num = application.section.course.course_code
 	application.is_assigned = True
-	return redirect('/home/')
+	application.save()
+	return redirect('/dashboard/hod/current-courses/' + course_num + '/')
 
 @user_passes_test(is_hod)
 @login_required
