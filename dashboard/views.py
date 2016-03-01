@@ -171,8 +171,9 @@ def hod_current_courses(request):
 def hod_current_sem_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     sections = Section.objects.filter(course__course_code=course_num)
+    applications = Application.objects.filter(section__course=course)
     prev_faculty = PrevAssignment.objects.filter(course__course_code=course_num)
-    return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty})
+    return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty, 'applications':applications})
 
 @user_passes_test(is_hod)
 @login_required
