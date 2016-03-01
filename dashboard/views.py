@@ -77,7 +77,7 @@ def login(request):
 
 
 @require_http_methods(["GET", "POST"])
-def register(request):
+def register(request): 
     if request.method=='POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -91,10 +91,11 @@ def register(request):
                 else:
                     g = Group.objects.get(name='hod')
                 g.user_set.add(user)
+                Expertise.objects.create(user = user, course = form.cleaned_data["course_name"], num_years = form.cleaned_data["exp_years"])
                 return HttpResponseRedirect('/login/')
     else:   
         form = RegisterForm()
-    return render(request, 'register.html', {'form':form})
+    return render(request, 'register.html', {'form':form })
 
 
 

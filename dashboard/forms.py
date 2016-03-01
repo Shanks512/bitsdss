@@ -4,6 +4,8 @@ from .models import *
 
 CHOICES = [('faculty','Faculty'),('hod', 'Head of Department')]
 
+course_list = Course.objects.all()
+
 class RegisterForm(forms.ModelForm):
     firstname = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Full Name', 'class':'form-control'}))
     lastname = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Last Name', 'class':'form-control'}))
@@ -11,9 +13,11 @@ class RegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Enter password here', 'class':'form-control'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Retype password', 'class':'form-control'}))
     designation = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class':'form-control'}))
+    course_name = forms.ModelChoiceField(queryset=Course.objects.all(), widget=forms.Select(attrs={'class':'form-control'}))
+    exp_years = forms.CharField(widget=forms.NumberInput(attrs={'placeholder':'Years of Experience', 'class':'form-control'}))
     class Meta:
         model = User 
-        fields = ('firstname', 'lastname', 'username', 'designation', 'password', 'password2',)
+        fields = ('firstname', 'lastname', 'username', 'designation', 'password', 'password2', 'course_name', 'exp_years')
 
 class AddCourseForm(forms.ModelForm):
     course_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Course name', 'class':'form-control'}))
