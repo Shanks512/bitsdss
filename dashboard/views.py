@@ -175,6 +175,11 @@ def hod_current_sem_course_details(request, course_num):
     applications = Application.objects.filter(section__course = course)
     return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty, 'applications':applications})
 
+def assign(request, application_id):
+	application = get_object_or_404(Application, pk = application_id)
+	application.is_assigned = True
+	return redirect('/home/')
+
 @user_passes_test(is_hod)
 @login_required
 def hod_department_courses(request):

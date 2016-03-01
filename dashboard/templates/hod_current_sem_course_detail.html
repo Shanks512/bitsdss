@@ -182,7 +182,7 @@
                   </div>
               </div>
 
-            <a class="btn btn-green approve-button">Approve</a>
+            <a class="btn btn-green approve-button" href="">Approve</a>
           </div>
         </div>
       </div>
@@ -212,7 +212,7 @@
         var t2 = t1.substr(t1.indexOf("_") + 1);
         var years = t2.substr(0, t2.indexOf('_'));
         $(".expertise-name").text(course_name + " - " + years + " years");
-        $(".approve-button").attr('id', $("#applicationid__" + $id_tmp).attr('value'));
+        $(".approve-button").attr('href', "/applications/" + $("#applicationid__" + $id_tmp).attr('value') + "/assign/");
       });
 
 

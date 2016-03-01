@@ -29,6 +29,8 @@ urlpatterns = [
     url(r'^dashboard/hod/course-cart/$',views.HodApplicationList.as_view(), name='hod-applied-sections'),
     url(r'^dashboard/hod/faculty-detail/$', views.hod_faculty_detail, name='hod_faculty_detail'),
     
+    url(r'^applications/(?P<application_id>\w+)/assign/$', views.assign, name = 'assign-course'),
+    
     url(r'^sections/(?P<section_id>\w+)/add/$', views.add_section, name='add-section'),
     url(r'^sections/(?P<section_id>\w+)/remove/$', views.remove_section, name='remove-section'),
     # url(r'^dashboard/hod/sections/(?P<section_id>\w+)/remove/$', views.hod_remove_section, name='hod-remove-section'),
