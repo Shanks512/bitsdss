@@ -49,25 +49,23 @@
 
 
             <div class="col-md-12 no-padding">
-              <div class="col-md-1">
-                <span class="expertise-number">1</span>
-              </div>
-              <div class="col-md-11">
-                <div class="col-md-6">
-                  <input type="text" class="form-control" placeholder="Expertise">
-                </div>
-                <div class="col-md-6">
-                  <input type="text" class="form-control" placeholder="Years of experience">
+
+
+                <!-- <div class="col-md-6">
+                  <input type="text" class="form-control" placeholder="Expertise"> 
+                </div>-->
+                <div class="col-md-12">
+                  {{ form.course_name }}
                 </div>
                 <div class="col-md-12">
-                  <div id="course-list" class="tag-list"></div>
+                  {{ form.exp_years }}
                 </div>
-              </div>
+
             </div>
 
-            <div class="col-md-12" id="add-expertise-button">
+            <!-- <div class="col-md-12" id="add-expertise-button">
               <a class="btn btn-blue btn-add-expertise margin-top-20" id="add-expertise"><span class="glyphicon glyphicon-plus-sign margin-right-10"></span>Add another expertise</a>
-            </div>
+            </div> -->
           
           <div class="col-md-12" id="add-expertise-button">
             <input type="submit" class="btn btn-green margin-top-20" value="Register" />

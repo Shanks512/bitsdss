@@ -171,9 +171,8 @@ def hod_current_courses(request):
 def hod_current_sem_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     sections = Section.objects.filter(course__course_code=course_num)
-    applications = Application.objects.filter(section__course=course)
     prev_faculty = PrevAssignment.objects.filter(course__course_code=course_num)
-    return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty, 'applications':applications})
+    return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty})
 
 @user_passes_test(is_hod)
 @login_required
@@ -193,12 +192,15 @@ def admin_department_courses(request):
     course_list = Course.objects.all()
     return render(request, 'admin_department_courses.html', {'course_list':course_list})
 
-@user_passes_test(is_faculty)
-def faculty_current_sem_course_details(request, course_num):
+@user_passes_test(is_hod)
+@login_required
+# @time_check(is_app_or_ass_window)
+def hod_current_sem_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     sections = Section.objects.filter(course__course_code=course_num)
+    applications = Application.objects.filter(section__course=course)
     prev_faculty = PrevAssignment.objects.filter(course__course_code=course_num)
-    return render(request, 'faculty_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty})
+    return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty, 'applications':applications})
 
 
 @login_required
