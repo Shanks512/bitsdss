@@ -19,6 +19,17 @@ class RegisterForm(forms.ModelForm):
         model = User 
         fields = ('firstname', 'lastname', 'username', 'designation', 'password', 'password2', 'course_name', 'exp_years')
 
+class EditProfile(forms.ModelForm):
+    firstname = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Full Name', 'class':'form-control'}))
+    lastname = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Last Name', 'class':'form-control'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Username', 'class':'form-control'}))
+    designation = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class':'form-control'}))
+    course_name = forms.ModelChoiceField(queryset=Course.objects.all(), widget=forms.Select(attrs={'class':'form-control'}))
+    exp_years = forms.CharField(widget=forms.NumberInput(attrs={'placeholder':'Years of Experience', 'class':'form-control'}))
+    class Meta:
+        model = User 
+        fields = ('firstname', 'lastname', 'username', 'designation', 'course_name', 'exp_years')
+
 class AddCourseForm(forms.ModelForm):
     course_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Course name', 'class':'form-control'}))
     course_code = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Course code', 'class':'form-control'}))

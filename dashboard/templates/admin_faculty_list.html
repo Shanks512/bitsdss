@@ -44,7 +44,7 @@
                   </thead>
                   <tbody>
                     {% for user in user_list %}
-                    <tr>
+                    <tr class="clickable-row" data-href="/dashboard/admin/faculty-list/{{ user.username }}/">
                       <td>{{ user.first_name }} {{ user.last_name }}</td>
                       <td>{{ user.username }}</td>
                     </tr>

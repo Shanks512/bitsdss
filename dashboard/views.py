@@ -123,8 +123,31 @@ def admin_faculty_list(request):
 
 @user_passes_test(is_admin)
 def edit_faculty_profile(request, faculty_user_name):
-    faculty = User.objects.filter(username=faculty_user_name)
-    return render(request, 'admin_edit_faculty_profile.html', {'faculty': faculty})
+    faculty = User.objects.filter(username=faculty_user_name).first()
+    expertise = Expertise.objects.filter(user=faculty).first()
+    if request.method=='POST':
+    	user = User.objects.filter(username=faculty_user_name).first()
+        form = EditProfile(request.POST, instance=user)
+        if form.is_valid():
+        	print '**********************************************valid*********************************'
+        	form.save(commit=False)
+	        user.first_name = form.cleaned_data["firstname"]
+	        user.last_name = form.cleaned_data["lastname"]
+	        user.save()
+	        if form.cleaned_data["designation"] == 'faculty':
+	            g = Group.objects.get(name='faculty')
+	        else:
+	            g = Group.objects.get(name='hod')
+	        g.user_set.add(user)
+	        g.save()
+	        expertise.course = form.cleaned_data["course_name"]
+	        expertise.num_years = form.cleaned_data["exp_years"]
+	        '''Expertise.objects.create(user = user, course = form.cleaned_data["course_name"], num_years = form.cleaned_data["exp_years"])'''
+	        return HttpResponseRedirect('/dashboard/admin/')
+    else:   
+        form = EditProfile(initial={'firstname':faculty.first_name, 'lastname':faculty.last_name, 'username':faculty.username, 
+    	'designation':faculty.groups.first(), 'course_name':expertise.course, 'exp_years':expertise.num_years})
+    return render(request, 'admin_edit_faculty_profile.html', {'faculty': faculty, 'form':form})
 
 def admin_add_new_course(request):
     if request.method=='POST':
