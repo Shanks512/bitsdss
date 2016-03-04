@@ -98,8 +98,6 @@ def register(request):
         form = RegisterForm()
     return render(request, 'register.html', {'form':form })
 
-def edit_faculty_profile(request, faculty_user_name):
-	return render(request, 'admin_edit_faculty_profile.html')
 
 def logout(request):
     auth_logout(request)
@@ -122,6 +120,11 @@ def admin(request):
 def admin_faculty_list(request):
     user_list = User.objects.filter(groups__name='faculty') | User.objects.filter(groups__name='hod')
     return render(request, 'admin_faculty_list.html', {'user_list':user_list})
+
+@user_passes_test(is_admin)
+def edit_faculty_profile(request, faculty_user_name):
+    faculty = User.objects.filter(username=faculty_user_name)
+    return render(request, 'admin_edit_faculty_profile.html', {'faculty': faculty})
 
 def admin_add_new_course(request):
     if request.method=='POST':
