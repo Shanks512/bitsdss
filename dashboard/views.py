@@ -16,17 +16,17 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum
 
-def window_dec(id):
+def window_dec(name):
     def window():
-        w = TimeWindow.objects.get(id=id)
+        w = TimeWindow.objects.get(name=name)
         if (w.start_date is None) or (w.end_date is None):
             return False
         return w.start_date <= date.today() <= w.end_date
     return window
 
-is_selection_window = window_dec(1)
-is_application_window = window_dec(2)
-is_assignment_window = window_dec(3)
+is_selection_window = window_dec("course_selection_window")
+is_application_window = window_dec("course_application_window")
+is_assignment_window = window_dec("course_assignment_window")
 
 def is_app_or_ass_window():
     print "njjnsdfjsdnsjdnsj"
@@ -40,10 +40,11 @@ def time_check(window_check):
                 print "kjasdjdnas"
                 return func(*args, **kwargs)
             else:
-                print "ksnfknsfknaskfdjsakdnakjsdnaksndkansdkja"
                 return redirect('/time-error/')
        return func_wrapper
     return wind_check
+
+
 
 @login_required()
 def home(request):
@@ -146,6 +147,7 @@ def edit_faculty_profile(request, faculty_user_name):
 	        expertise.course = form.cleaned_data["course_name"]
 	        expertise.num_years = form.cleaned_data["exp_years"]
 	        '''Expertise.objects.create(user = user, course = form.cleaned_data["course_name"], num_years = form.cleaned_data["exp_years"])'''
+	        expertise.save()
 	        return HttpResponseRedirect('/dashboard/admin/')
     else:   
         form = EditProfile(initial={'firstname':faculty.first_name, 'lastname':faculty.last_name, 'username':faculty.username, 
@@ -344,7 +346,39 @@ def hod_remove_course_from_semester(request, course_num):
 @user_passes_test(is_admin)
 @login_required
 def set_time_windows(request):
-    return render(request, 'admin_set_time_windows.html')
+    selection_window = TimeWindow.objects.filter(name='course_selection_window').first()
+    print selection_window.start_date
+    application_window = TimeWindow.objects.filter(name='course_application_window').first()
+    assignment_window = TimeWindow.objects.filter(name='course_assignment_window').first()
+    if request.method=='POST':
+        form = SetWindowsForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+
+            selection_window.start_date = form.cleaned_data["course_selection_start"]
+            selection_window.end_date = form.cleaned_data["course_selection_end"]
+
+            application_window.start_date = form.cleaned_data["course_application_start"]
+            application_window.end_date = form.cleaned_data["course_application_end"]
+
+            assignment_window.start_date = form.cleaned_data["course_assignment_start"]
+            assignment_window.end_date = form.cleaned_data["course_assignment_end"]
+
+            selection_window.save()
+            application_window.save()
+            assignment_window.save()
+            print form.cleaned_data["course_selection_start"]
+            return HttpResponseRedirect('/home/')
+    else:   
+        form = SetWindowsForm(initial={
+        	'course_selection_start':selection_window.start_date, 
+        	'course_selection_end':selection_window.end_date, 
+        	'course_application_start':application_window.start_date,
+        	'course_application_end':application_window.end_date,
+        	'course_assignment_start':assignment_window.start_date,
+        	'course_assignment_end':assignment_window.end_date,
+        	})
+    return render(request, 'admin_set_time_windows.html', {'form':form})
 
 def time_error(request):
     return render(request, 'error_page.html')

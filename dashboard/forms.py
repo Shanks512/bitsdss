@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import DateTimeField
 from django.contrib.auth.models import User
 from .models import *
 
@@ -38,4 +39,19 @@ class AddCourseForm(forms.ModelForm):
 
     class Meta:
         model = Course
-        fields = ('course_name', 'course_code', 'units', 'description') 
+        fields = ('course_name', 'course_code', 'units', 'description')
+
+class SetWindowsForm(forms.ModelForm):
+    course_selection_start = forms.DateField(widget=forms.DateInput(attrs={'placeholder':'Start date', 'id':'datetimepicker1', 'class':'form-control date-picker'}),)
+    course_selection_end = forms.DateField(widget=forms.TextInput(attrs={'placeholder':'End date', 'id':'datetimepicker2', 'class':'form-control'}),)
+
+    course_application_start = forms.DateField(widget=forms.TextInput(attrs={'placeholder':'Start date', 'id':'datetimepicker3', 'class':'form-control'}),)
+    course_application_end = forms.DateField(widget=forms.TextInput(attrs={'placeholder':'End date', 'id':'datetimepicker4', 'class':'form-control'}),)
+
+    course_assignment_start = forms.DateField(widget=forms.TextInput(attrs={'placeholder':'Start date', 'id':'datetimepicker5', 'class':'form-control'}),)
+    course_assignment_end = forms.DateField(widget=forms.TextInput(attrs={'placeholder':'End date', 'id':'datetimepicker6', 'class':'form-control'}),)
+
+    class Meta:
+        model = TimeWindow
+        fields = ('course_selection_start', 'course_selection_end', 'course_application_start', 
+            'course_application_end', 'course_assignment_start', 'course_assignment_end')

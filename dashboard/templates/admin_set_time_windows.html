@@ -26,70 +26,48 @@
 
     <div class="col-xs-10 content-area">
        <div class="col-xs-12 material-card" style="height:100%;">
-            <div class="col-md-7"><h3>Course Selection Window</h3></div>
+            <div class="col-md-7"><h3>Set Time Windows</h3></div>
             <div class="col-md-5">
               <div class="icon-container">
                 <a href=""><span class="glyphicon glyphicon-print"></span></a>
                 <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
               </div>
             </div>
-            <form>
+           
+            <form method="post">{% csrf_token %}
+              <div class="col-md-12" style="margin-top:20px;"><h4>Course Selection Window</h4></div>
+              
+
               <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="Start Time" id="datetimepicker1">
+                {{ form.course_selection_start }}
               </div>
               <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="End Time" id="datetimepicker2">
+                {{ form.course_selection_end }}
               </div>
-            </form>
-            <div class="col-md-12">
-              <a class="btn btn-green" data-toggle="modal" href="#time-window-set" style="margin-top:20px;">Save Details</a>
-            </div>
-          </div>
 
 
-        <div class="col-xs-12 material-card" style="height:100%;">
-            <div class="col-md-7"><h3>Course Application Window</h3></div>
-            <div class="col-md-5">
-              <div class="icon-container">
-                <a href=""><span class="glyphicon glyphicon-print"></span></a>
-                <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
-              </div>
-            </div>
-            <form>
+              <div class="col-md-12" style="margin-top:20px;"><h4>Course Application Window</h4></div>
               <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="Start Time" id="datetimepicker3">
+                {{ form.course_application_start }}
               </div>
               <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="End Time" id="datetimepicker4">
+                {{ form.course_application_end }}
               </div>
-            </form>
-            <div class="col-md-12">
-              <a class="btn btn-green" data-toggle="modal" href="#time-window-set" style="margin-top:20px;">Save Details</a>
-            </div>
-          </div>
 
 
-          <div class="col-xs-12 material-card" style="height:100%;">
-            <div class="col-md-7"><h3>Course Assignment Window</h3></div>
-            <div class="col-md-5">
-              <div class="icon-container">
-                <a href=""><span class="glyphicon glyphicon-print"></span></a>
-                <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
-              </div>
-            </div>
-            <form>
+              <div class="col-md-12" style="margin-top:20px;"><h4>Course Assignment Window</h4></div>
               <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="Start Time" id="datetimepicker5">
+                {{ form.course_assignment_start }}
               </div>
               <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="End Time" id="datetimepicker6">
+                {{ form.course_assignment_end }}
               </div>
-            </form>
-            <div class="col-md-12">
-              <a class="btn btn-green" data-toggle="modal" href="#time-window-set" style="margin-top:20px;">Save Details</a>
+
+              <div class="col-md-12">
+                <input type="submit" class="btn btn-green margin-top-20" value="Save Details"/>
+              </div>
             </div>
-          </div>
-  
+          </form>
 
 
 
@@ -107,14 +85,28 @@
       });
 
 
-            $(function () {
-          $('#datetimepicker1').datetimepicker();
-          $('#datetimepicker2').datetimepicker();
-          $('#datetimepicker3').datetimepicker();
-          $('#datetimepicker4').datetimepicker();
-          $('#datetimepicker5').datetimepicker();
-          $('#datetimepicker6').datetimepicker();
-      });
+
+          $('#datetimepicker1').datetimepicker({
+            defaultDate: "11/1/2013",
+            format: 'MM/DD/YYYY'
+           });
+          $('#datetimepicker2').datetimepicker({
+            format: 'MM/DD/YYYY'
+           });
+          $('#datetimepicker3').datetimepicker({
+            format: 'MM/DD/YYYY'
+           });
+          $('#datetimepicker4').datetimepicker({
+            format: 'MM/DD/YYYY'
+           });
+          $('#datetimepicker5').datetimepicker({
+            format: 'MM/DD/YYYY'
+           });
+          $('#datetimepicker6').datetimepicker({
+            format: 'MM/DD/YYYY'
+           });
+
+
 
 
     </script>

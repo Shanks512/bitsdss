@@ -10,31 +10,29 @@
 {% block body %}
   {{ block.super }}
 
-<div class="container-fluid" style="margin-top:70px">
-      <div class="row register-container">
-        <div class="col-md-12 material-card" style="text-align:center;">
-          <div class="col-md-12">
+<div class="container-fluid main-area">
+    <div class="col-xs-2 side-menu">
+      <ul class="menu-eng">
+          <li><a href="/dashboard/admin/"><span class="glyphicon glyphicon-education"></span>Department Courses</a></li>
+          <li><a href="/dashboard/admin/time-windows/"><span class="glyphicon glyphicon-star"></span>Time Windows</a></li>
+          <li><a href="/dashboard/admin/faculty-list/"><span class="glyphicon glyphicon-star"></span>Faculty List</a></li>
+        </ul>
+        <ul class="menu-hindi hide">
+          <li><a href="/dashboard/admin/"><span class="glyphicon glyphicon-education"></span>विभाग पाठ्यक्रम</a></li>
+          <li><a href="/dashboard/admin/time-windows/"><span class="glyphicon glyphicon-star"></span>समय खिड़कियां</a></li>
+          <li><a href="/dashboard/admin/faculty-list/"><span class="glyphicon glyphicon-star"></span>शिक्षक सूची</a></li>
+        </ul>
+    </div>
+
+    <div class="col-xs-10 content-area">
+          <div class="col-xs-12 material-card" style="height:100%;" id="material-card-1">
             <h1>Whoops!</h1>
             <p>You cannot access this page now. Please check back at 3PM.</p>
-            <a class="btn btn-green margin-top-20" href="/home/">Go Back</a>
+            <a class="btn btn-green margin-top-20" href="/home/">Home</a>
           </div>
       </div>
-    </div>
 
-
-
-    <div id="registered" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-body align-center">
-            <img src="{% static 'img/tick-icon.png' %}">
-            <h3>Registration Successful</h3>
-            <p>You have succesfully registered on the DSS System</p>
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
 {% endblock %}
 
 {% block script %}
