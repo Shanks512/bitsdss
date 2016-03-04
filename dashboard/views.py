@@ -29,15 +29,19 @@ is_application_window = window_dec(2)
 is_assignment_window = window_dec(3)
 
 def is_app_or_ass_window():
-    return (is_application_window or is_assignment_window)
+    print "njjnsdfjsdnsjdnsj"
+    return (is_application_window() or is_assignment_window())
 
 def time_check(window_check):
+    print "kjadaskjbdasndfb"
     def wind_check(func):
        def func_wrapper(*args, **kwargs):
             if window_check():
-                func(*args, **kwargs)
+                print "kjasdjdnas"
+                return func(*args, **kwargs)
             else:
-                return redirect('/error/')
+                print "ksnfknsfknaskfdjsakdnakjsdnaksndkansdkja"
+                return redirect('/time-error/')
        return func_wrapper
     return wind_check
 
@@ -161,12 +165,14 @@ def admin_add_new_course(request):
 
 
 @user_passes_test(is_hod)
+@time_check(is_app_or_ass_window)
 def hod(request):
     course_list = Course.objects.all()
     return render(request, 'hod_department_courses.html', {'course_list':course_list})
 
 @user_passes_test(is_faculty)
 @login_required
+@time_check(is_app_or_ass_window)
 def faculty(request):
     course_list = Course.objects.filter(is_current_sem=True)
     return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
@@ -180,21 +186,21 @@ def faculty_current_courses(request):
 
 @user_passes_test(is_faculty)
 @login_required
-# @time_check(is_app_or_ass_window)
+@time_check(is_app_or_ass_window)
 def faculty_department_courses(request):
     course_list = Course.objects.all()
     return render(request, 'faculty_department_courses.html', {'course_list':course_list})
 
 @user_passes_test(is_hod)
 @login_required
-# @time_check(is_app_or_ass_window)
+@time_check(is_app_or_ass_window)
 def hod_current_courses(request):
     course_list = Course.objects.filter(is_current_sem=True)
     return render(request, 'hod_current_sem_courses.html', {'course_list':course_list})
 
 @user_passes_test(is_hod)
 @login_required
-# @time_check(is_app_or_ass_window)
+@time_check(is_app_or_ass_window)
 def hod_current_sem_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     sections = Section.objects.filter(course__course_code=course_num)
@@ -203,6 +209,7 @@ def hod_current_sem_course_details(request, course_num):
     faculty = User.objects.exclude(groups__name='admin').annotate(total_hours=Sum('application__section__num_hours'))
     return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty, 'applications':applications, 'faculty':faculty})
 
+@time_check(is_assignment_window)
 def assign(request, application_id):
 	application = get_object_or_404(Application, pk = application_id)
 	course_num = application.section.course.course_code
@@ -212,12 +219,14 @@ def assign(request, application_id):
 
 @user_passes_test(is_hod)
 @login_required
+@time_check(is_selection_window)
 def hod_department_courses(request):
     course_list = Course.objects.all()
     return render(request, 'hod_department_courses.html', {'course_list':course_list})
 
 @user_passes_test(is_hod)
 @login_required
+@time_check(is_selection_window)
 def department_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     return render(request, 'hod_dept_course_detail.html', {'course':course})
@@ -229,14 +238,15 @@ def admin_department_courses(request):
     return render(request, 'admin_department_courses.html', {'course_list':course_list})
 
 @user_passes_test(is_faculty)
+@time_check(is_app_or_ass_window)
 def faculty_current_sem_course_details(request, course_num):
     course = Course.objects.get(course_code=course_num)
     sections = Section.objects.filter(course__course_code=course_num)
     prev_faculty = PrevAssignment.objects.filter(course__course_code=course_num)
     return render(request, 'faculty_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty})
 
-
 @login_required
+@time_check(is_app_or_ass_window)
 def faculty_course_detail(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     return render(request, 'dashboard/faculty_course_detail.html', {'course': course})
@@ -255,12 +265,14 @@ def admin_course_detail(request, course_id):
 
 @user_passes_test(is_faculty)
 @login_required
+@time_check(is_app_or_ass_window)
 def faculty_applied_sections(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     return render(request, 'dashboard/faculty_course_detail.html', {'course': course})
 
 @user_passes_test(is_hod)
 @login_required
+@time_check(is_app_or_ass_window)
 def hod_faculty_detail(request):
     expertise = get_object_or_404(Expertise, user=request.application.user)
     return render(request, 'hod_faculty_detail.html', {'expertise':expertise})
@@ -297,14 +309,14 @@ class HodApplicationList(UserPassesTestMixin, ListView):
         return self.request.user.groups.filter(name='hod').exists()
 
 @login_required
-# @time_check(is_application_window)
+@time_check(is_application_window)
 def add_section(request, section_id):
     sec = get_object_or_404(Section, pk=section_id)
     appl = Application.objects.get_or_create(user=request.user, section=sec)
     return redirect('/home/')
 
 @login_required
-# @time_check(is_application_window)
+@time_check(is_application_window)
 def remove_section(request, section_id):
     sec = get_object_or_404(Section, pk=section_id)
     appl = Application.objects.get(user=request.user, section=sec)
@@ -313,7 +325,7 @@ def remove_section(request, section_id):
 
 @user_passes_test(is_hod)
 @login_required
-# @time_check(is_selection_window)
+@time_check(is_selection_window)
 def hod_add_course_to_semester(request, course_num):
     course = get_object_or_404(Course, course_code=course_num)
     course.is_current_sem = True
@@ -322,7 +334,7 @@ def hod_add_course_to_semester(request, course_num):
 
 @user_passes_test(is_hod)
 @login_required
-# @time_check(is_selection_window)
+@time_check(is_selection_window)
 def hod_remove_course_from_semester(request, course_num):
     course = get_object_or_404(Course, course_code=course_num)
     course.is_current_sem = False
