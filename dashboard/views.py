@@ -129,7 +129,6 @@ def edit_faculty_profile(request, faculty_user_name):
     	user = User.objects.filter(username=faculty_user_name).first()
         form = EditProfile(request.POST, instance=user)
         if form.is_valid():
-        	print '**********************************************valid*********************************'
         	form.save(commit=False)
 	        user.first_name = form.cleaned_data["firstname"]
 	        user.last_name = form.cleaned_data["lastname"]
