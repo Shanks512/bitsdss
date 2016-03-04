@@ -38,5 +38,7 @@ urlpatterns = [
     # url(r'^dashboard/hod/sections/(?P<section_id>\w+)/remove/$', views.hod_remove_section, name='hod-remove-section'),
     
     url(r'^dashboard/hod/sem-courses/(?P<course_num>\w+)/add/$', views.hod_add_course_to_semester, name='hod-add-course-to-semester'),
-    url(r'^dashboard/hod/sem-courses/(?P<course_num>\w+)/remove/$', views.hod_remove_course_from_semester, name='hod-remove-course-from-semester')
+    url(r'^dashboard/hod/sem-courses/(?P<course_num>\w+)/remove/$', views.hod_remove_course_from_semester, name='hod-remove-course-from-semester'),
+
+    url(r'^time-error/$', views.time_error, name='time_error')
 ]

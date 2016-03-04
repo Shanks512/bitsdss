@@ -37,7 +37,7 @@ def time_check(window_check):
             if window_check():
                 func(*args, **kwargs)
             else:
-                return redirect('/home/')
+                return redirect('/error/')
        return func_wrapper
     return wind_check
 
@@ -173,7 +173,7 @@ def faculty(request):
 
 @user_passes_test(is_faculty)
 @login_required
-# @time_check(is_app_or_ass_window)
+@time_check(is_app_or_ass_window)
 def faculty_current_courses(request):
     course_list = Course.objects.filter(is_current_sem=True)
     return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
@@ -333,3 +333,6 @@ def hod_remove_course_from_semester(request, course_num):
 @login_required
 def set_time_windows(request):
     return render(request, 'admin_set_time_windows.html')
+
+def time_error(request):
+    return render(request, 'error_page.html')
