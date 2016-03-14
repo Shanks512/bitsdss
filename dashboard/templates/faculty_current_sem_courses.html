@@ -23,7 +23,7 @@
 	  </div>
 
 	  <div class="col-xs-10 content-area">
-          <div class="col-xs-12 material-card" style="height:100%;" id="material-card-1">
+          <div class="col-xs-12 material-card" style="height:100%;padding-bottom:50px;" id="material-card-1">
             <div class="col-md-7"><h3>Current Semester Courses</h3></div>
             <div class="col-md-5">
               <div class="icon-container">
@@ -33,25 +33,33 @@
               </div>
             </div>
 
-            <div class="col-md-12 course-list-table-container" style="overflow-y:auto;height:65vh;">
+            <div class="col-md-12 course-list-table-container" style="overflow-y:auto;height:65vh;padding-bottom:30px">
                 <table class="table">
                   <thead>
                     <tr>
+                      <th>Sel</th>
                       <th>Course Name</th>
                       <th>Course Code</th>
                       <th>Units</th>
+                      <th>Type</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for course in course_list %}
-                    <tr class="clickable-row" data-href="/dashboard/faculty/current-courses/{{ course.course_code }}/">
-                      <td>{{ course.course_name }}</td>
-                      <td>{{ course.course_code }}</td>
-                      <td>{{ course.units }}</td>
+                    {% for section in section_list %}
+                    <tr>
+                      <td><input type="checkbox" class="test" id="test" name="{{ section.id }}" style="z-index:2;"></td>
+                      <td class="clickable-row" data-href="/dashboard/faculty/current-courses/{{ section.course.course_code }}/">{{ section.course.course_name }}</td>
+                      <td class="clickable-row" data-href="/dashboard/faculty/current-courses/{{ section.course.course_code }}/">{{ section.course.course_code }}</td>
+                      <td class="clickable-row" data-href="/dashboard/faculty/current-courses/{{ section.course.course_code }}/">{{ section.course.units }}</td>
+                      <td class="clickable-row" data-href="/dashboard/faculty/current-courses/{{ section.course.course_code }}/">{{ section.section_type }}</td>
                     </tr>
                     {% endfor %}
                   </tbody>
                 </table>
+            </div>
+
+            <div class="row" style="position: absolute;padding: 20px;bottom: 0px;background: rgb(255, 255, 255) none repeat scroll 0% 0%;box-shadow: 0px -5px 7px rgba(0, 0, 0, 0.08);width:100%;margin-left:-20px;">
+            	<div class="col-md-12"><a onClick="multi_apply()" class="btn btn-green">Apply for selected courses</a></div>
             </div>
           </div>
       </div>
@@ -81,6 +89,16 @@
       $("#print-icon-1").click(function(){
         $("#material-card1").print(/*options*/);
       });
+
+		function multi_apply() {
+			$section = "";
+			$("input:checkbox:checked").each(function(index,elem){
+			    $section = $section + "_" + $(elem).attr('name');
+			});
+			$section = $section.substring(1)
+			alert("Application submitted succesfully!")
+			window.location = "/sections/list/" + $section + "/add/";
+		}
 
       $(document).ready(function() {
 	    if (Cookies.get('lang-faculty') == null){

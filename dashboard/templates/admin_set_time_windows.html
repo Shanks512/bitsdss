@@ -25,50 +25,99 @@
 	  </div>
 
     <div class="col-xs-10 content-area">
+
+       {% if not selection_window.start_date %}
        <div class="col-xs-12 material-card" style="height:100%;">
-            <div class="col-md-7"><h3>Set Time Windows</h3></div>
-            <div class="col-md-5">
-              <div class="icon-container">
-                <a href=""><span class="glyphicon glyphicon-print"></span></a>
-                <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
-              </div>
+        <div class="col-md-7"><h4>Course Selection Window</h4></div>
+        <div class="col-md-5">
+          <div class="icon-container">
+            <a href=""><span class="glyphicon glyphicon-print"></span></a>
+            <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+          </div>
+        </div>
+       
+        
+          <form method="post" action="/dashboard/admin/time-windows/set-selection-window/">{% csrf_token %}
+
+            <div class="col-md-6">
+              <input name="course_selection_start" type="text" id="datetimepicker1" class="form-control">
             </div>
-           
-            <form method="post">{% csrf_token %}
-              <div class="col-md-12" style="margin-top:20px;"><h4>Course Selection Window</h4></div>
-              
-
-              <div class="col-md-6">
-                {{ form.course_selection_start }}
-              </div>
-              <div class="col-md-6">
-                {{ form.course_selection_end }}
-              </div>
-
-
-              <div class="col-md-12" style="margin-top:20px;"><h4>Course Application Window</h4></div>
-              <div class="col-md-6">
-                {{ form.course_application_start }}
-              </div>
-              <div class="col-md-6">
-                {{ form.course_application_end }}
-              </div>
-
-
-              <div class="col-md-12" style="margin-top:20px;"><h4>Course Assignment Window</h4></div>
-              <div class="col-md-6">
-                {{ form.course_assignment_start }}
-              </div>
-              <div class="col-md-6">
-                {{ form.course_assignment_end }}
-              </div>
-
-              <div class="col-md-12">
-                <input type="submit" class="btn btn-green margin-top-20" value="Save Details"/>
-              </div>
+            <div class="col-md-6">
+              <input name="course_selection_end" type="text" id="datetimepicker2" class="form-control">
             </div>
+
+            <div class="col-md-12">
+              <input type="submit" class="btn btn-green margin-top-20" value="Save Details"/>
+            </div>
+          </div>
+
           </form>
+        {% endif %}
 
+
+        {% if selection_window.end_date %}
+        {% if not application_window.start_date %}
+        <div class="col-xs-12 material-card">
+        <div class="col-md-7"><h4>Course Application Window</h4></div>
+        <div class="col-md-5">
+          <div class="icon-container">
+            <a href=""><span class="glyphicon glyphicon-print"></span></a>
+            <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+          </div>
+        </div>
+       
+        <form method="post" action="/dashboard/admin/time-windows/set-application-window/">{% csrf_token %}
+
+            <div class="col-md-6">
+              <input name="course_application_start" type="text" id="datetimepicker3" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <input name="course_application_end" type="text" id="datetimepicker4" class="form-control">
+            </div>
+
+            <div class="col-md-12">
+              <input type="submit" class="btn btn-green margin-top-20" value="Save Details"/>
+            </div>
+          </div>
+
+          </form>
+        {% endif %}
+        {% endif %}
+
+
+
+
+        {% if application_window.end_date %}
+        {% if not assignment_window.start_date %}
+        <div class="col-xs-12 material-card">
+        <div class="col-md-7"><h4>Course Assignment Window</h4></div>
+        <div class="col-md-5">
+          <div class="icon-container">
+            <a href=""><span class="glyphicon glyphicon-print"></span></a>
+            <a href="" data-toggle="tooltip" data-placement="left" title="This section lists all the courses offered in the current semester."><span class="glyphicon glyphicon-question-sign"></span></a>
+          </div>
+        </div>
+       
+        <form method="post" action="/dashboard/admin/time-windows/set-assignment-window/">{% csrf_token %}
+
+            <div class="col-md-6">
+              <input name="course_assignment_start" type="text" id="datetimepicker5" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <input name="course_assignment_end" type="text" id="datetimepicker6" class="form-control">
+            </div>
+
+            <div class="col-md-12">
+              <input type="submit" class="btn btn-green margin-top-20" value="Save Details"/>
+            </div>
+          </div>
+
+          </form>
+        {% endif %}
+        {% endif %}
+
+
+       
 
 
     </div>
@@ -87,7 +136,6 @@
 
 
           $('#datetimepicker1').datetimepicker({
-            defaultDate: "11/1/2013",
             format: 'MM/DD/YYYY'
            });
           $('#datetimepicker2').datetimepicker({

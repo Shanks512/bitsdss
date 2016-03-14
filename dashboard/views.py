@@ -177,7 +177,8 @@ def hod(request):
 @time_check(is_app_or_ass_window)
 def faculty(request):
     course_list = Course.objects.filter(is_current_sem=True)
-    return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list})
+    section_list = Section.objects.filter(course__is_current_sem=True)
+    return render(request, 'faculty_current_sem_courses.html', {'course_list':course_list, 'section_list':section_list})
 
 @user_passes_test(is_faculty)
 @login_required
@@ -198,7 +199,8 @@ def faculty_department_courses(request):
 @time_check(is_app_or_ass_window)
 def hod_current_courses(request):
     course_list = Course.objects.filter(is_current_sem=True)
-    return render(request, 'hod_current_sem_courses.html', {'course_list':course_list})
+    section_list = Section.objects.filter(course__is_current_sem=True)
+    return render(request, 'hod_current_sem_courses.html', {'course_list':course_list, 'section_list':section_list})
 
 @user_passes_test(is_hod)
 @login_required
@@ -295,6 +297,20 @@ class FacultyApplicationList(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+class FacultyApprovedList(ListView):
+    context_object_name = 'approved_list'
+    template_name = 'faculty_approved_courses.html'
+
+    def get_queryset(self):
+        return Application.objects.filter(user=self.request.user).filter(is_assigned=True)
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(FacultyApprovedList, self).get_context_data(**kwargs)
+        return context
+
+
+@method_decorator(login_required, name='dispatch')
 class HodApplicationList(UserPassesTestMixin, ListView):
     context_object_name = 'application_list'
     template_name = 'hod_course_cart.html'
@@ -323,7 +339,7 @@ def remove_section(request, section_id):
     sec = get_object_or_404(Section, pk=section_id)
     appl = Application.objects.get(user=request.user, section=sec)
     appl.delete()
-    return redirect('/home/')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @user_passes_test(is_hod)
 @login_required
@@ -350,35 +366,66 @@ def set_time_windows(request):
     print selection_window.start_date
     application_window = TimeWindow.objects.filter(name='course_application_window').first()
     assignment_window = TimeWindow.objects.filter(name='course_assignment_window').first()
+    return render(request, 'admin_set_time_windows.html', {'selection_window':selection_window, 'application_window':application_window,
+    	'assignment_window':assignment_window})
+
+@user_passes_test(is_admin)
+@login_required
+def set_selection_window(request):
+    selection_window = TimeWindow.objects.filter(name='course_selection_window').first()
     if request.method=='POST':
-        form = SetWindowsForm(request.POST)
-        if form.is_valid():
-            form.save(commit=False)
+        form = SetSelectionWindowForm(request.POST)
+        form.save(commit=False)
+        selection_window.start_date = form.cleaned_data["course_selection_start"]
+        selection_window.end_date = form.cleaned_data["course_selection_end"]
+        selection_window.save()
+        print selection_window.start_date
+        return HttpResponseRedirect('/home/')
+    else:
+        form = SetSelectionWindowForm()
 
-            selection_window.start_date = form.cleaned_data["course_selection_start"]
-            selection_window.end_date = form.cleaned_data["course_selection_end"]
+@user_passes_test(is_admin)
+@login_required
+def set_application_window(request):
+    application_window = TimeWindow.objects.filter(name='course_application_window').first()
+    print application_window.start_date
+    if request.method=='POST':
+        form = SetApplicationWindowForm(request.POST)
+        form.save(commit=False)
+        application_window.start_date = form.cleaned_data["course_application_start"]
+        print application_window.start_date
+        application_window.end_date = form.cleaned_data["course_application_end"]
+        application_window.save()
+        print application_window.start_date
+        return HttpResponseRedirect('/home/')
+    else:
+        form = SetSelectionWindowForm()
 
-            application_window.start_date = form.cleaned_data["course_application_start"]
-            application_window.end_date = form.cleaned_data["course_application_end"]
-
-            assignment_window.start_date = form.cleaned_data["course_assignment_start"]
-            assignment_window.end_date = form.cleaned_data["course_assignment_end"]
-
-            selection_window.save()
-            application_window.save()
-            assignment_window.save()
-            print form.cleaned_data["course_selection_start"]
-            return HttpResponseRedirect('/home/')
-    else:   
-        form = SetWindowsForm(initial={
-        	'course_selection_start':selection_window.start_date, 
-        	'course_selection_end':selection_window.end_date, 
-        	'course_application_start':application_window.start_date,
-        	'course_application_end':application_window.end_date,
-        	'course_assignment_start':assignment_window.start_date,
-        	'course_assignment_end':assignment_window.end_date,
-        	})
-    return render(request, 'admin_set_time_windows.html', {'form':form})
+@user_passes_test(is_admin)
+@login_required
+def set_assignment_window(request):
+    assignment_window = TimeWindow.objects.filter(name='course_assignment_window').first()
+    if request.method=='POST':
+        form = SetAssignmentWindowForm(request.POST)
+        form.save(commit=False)
+        assignment_window.start_date = form.cleaned_data["course_assignment_start"]
+        assignment_window.end_date = form.cleaned_data["course_assignment_end"]
+        assignment_window.save()
+        print assignment_window.start_date
+        return HttpResponseRedirect('/home/')
+    else:
+        form = SetSelectionWindowForm()
 
 def time_error(request):
     return render(request, 'error_page.html')
+
+@login_required
+@time_check(is_application_window)
+def multiple_add_section(request, section_id_list):
+    new_list = section_id_list.split("_")
+    for section_id in new_list:
+        print (section_id)
+        sec = get_object_or_404(Section, pk=section_id)
+        appl = Application.objects.get_or_create(user=request.user, section=sec)
+        print (section_id + " done")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

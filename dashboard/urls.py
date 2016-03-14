@@ -14,6 +14,9 @@ urlpatterns = [
     url(r'^dashboard/admin/time-windows/$', views.set_time_windows, name='set-time-windows'),
     url(r'^dashboard/admin/faculty-list/$', views.admin_faculty_list, name='faculty_list'),
     url(r'^dashboard/admin/add-new-course/$', views.admin_add_new_course, name='add-new-course'),
+    url(r'^dashboard/admin/time-windows/set-selection-window/$', views.set_selection_window, name='set-selection-window'),
+    url(r'^dashboard/admin/time-windows/set-application-window/$', views.set_application_window, name='set-application-window'),
+    url(r'^dashboard/admin/time-windows/set-assignment-window/$', views.set_assignment_window, name='set-assignment-window'),
 
     url(r'^dashboard/admin/faculty-list/(?P<faculty_user_name>\w+)/$', views.edit_faculty_profile, name='edit-faculty-profile'),
 
@@ -21,6 +24,8 @@ urlpatterns = [
     url(r'^dashboard/faculty/current-courses/(?P<course_num>\w+)/$', views.faculty_current_sem_course_details),
     url(r'^dashboard/faculty/course-cart/$', views.FacultyApplicationList.as_view(), name='faculty-applied-sections'),
     
+    url(r'^dashboard/faculty/approved-courses/$', views.FacultyApprovedList.as_view(), name='faculty-approved-sections'),
+
     # url(r'^dashboard/faculty/sections/(?P<section_id>\w+)/add/$', views.faculty_add_section, name='faculty-add-section'),
     # url(r'^dashboard/faculty/sections/(?P<section_id>\w+)/remove/$', views.faculty_remove_section, name='faculty-remove-section'),
     
@@ -34,6 +39,7 @@ urlpatterns = [
     url(r'^applications/(?P<application_id>\w+)/assign/$', views.assign, name = 'assign-course'),
     
     url(r'^sections/(?P<section_id>\w+)/add/$', views.add_section, name='add-section'),
+    url(r'^sections/list/(?P<section_id_list>\w+)/add/$', views.multiple_add_section, name='multiple-add-section'),
     url(r'^sections/(?P<section_id>\w+)/remove/$', views.remove_section, name='remove-section'),
     # url(r'^dashboard/hod/sections/(?P<section_id>\w+)/remove/$', views.hod_remove_section, name='hod-remove-section'),
     
