@@ -211,6 +211,12 @@ def hod_current_sem_course_details(request, course_num):
     prev_faculty = PrevAssignment.objects.filter(course__course_code=course_num)
     applications = Application.objects.filter(section__course = course).filter(is_assigned=False)
     faculty = User.objects.exclude(groups__name='admin').annotate(total_hours=Sum('application__section__num_hours'))
+    for f in faculty:
+        print f.total_hours
+        if f.total_hours!=None:
+            f.prac_hours = int(f.total_hours * 0.5)
+            f.tut_hours = int(f.total_hours * 0.2)
+            f.lec_hours = int(f.total_hours * 0.3)
     return render(request, 'hod_current_sem_course_detail.html', {'course':course, 'sections':sections, 'prev_faculty':prev_faculty, 'applications':applications, 'faculty':faculty})
 
 @time_check(is_assignment_window)
